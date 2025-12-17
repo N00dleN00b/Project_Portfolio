@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -191,6 +192,13 @@
       box-shadow: 0 16px 35px rgba(0, 0, 0, 0.55);
     }
 
+    .about-buttons {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -247,6 +255,264 @@
 
     .project-link {
       color: #000;
+    }
+
+    /* ---------- EXPERIENCE / CYBERPUNK TIMELINE ---------- */
+    .experience-cyber {
+      max-width: 1100px;
+      margin: 80px auto;
+      padding: 0 24px 60px;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      text-align: center;
+    }
+
+    .experience-cyber h2 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .experience-intro {
+      max-width: 720px;
+      line-height: 1.6;
+      opacity: 0.85;
+      margin: 0 auto 40px; 
+    }
+
+      .cyber-timeline {
+      position: relative;
+      margin-top: 70px;
+
+      padding: 130px 40px 110px;
+
+      display: grid;
+      grid-template-columns: repeat(6, 1fr); /* 6 equal slots */
+      align-items: center;
+
+      background: transparent;
+      overflow: visible;
+    }
+
+    .timeline-bar {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      top: 50%;
+      height: 4px;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg, #00e5ff, #4f46e5, #ff3bff);
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.7);
+      border-radius: 999px;
+    }
+
+    .timeline-node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 0%;    
+      margin: 0 40px;      
+    } 
+
+    /* Alternating top/bottom card placement */
+    .timeline-node:nth-child(odd) .node-card {
+      bottom: 140%;
+    }
+
+    .timeline-node:nth-child(even) .node-card {
+      top: 140%;
+    }
+
+    .node-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00e5ff 0%, #4f46e5 60%, transparent 70%);
+      box-shadow:
+        0 0 12px rgba(0, 229, 255, 0.9),
+        0 0 24px rgba(79, 70, 229, 0.8);
+      position: relative;
+      z-index: 2;
+    }
+
+    .node-year {
+      margin-top: 10px;
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .node-card {
+      position: absolute;
+      width: 230px;
+      max-width: 260px;
+      padding: 10px 12px;
+      border-radius: 14px;
+
+        /* SOLID cyberpunk card (no translucency) */
+        background: linear-gradient(135deg, #050b24, #0b1038);
+        border: 1px solid rgba(0, 229, 255, 0.65);
+        box-shadow:
+          0 0 16px rgba(0, 229, 255, 0.4),
+          0 0 28px rgba(0, 0, 0, 0.95);
+
+  transform: translateY(-10px) scale(0.9);
+  opacity: 1;  /* fully opaque now */
+
+      transition:
+        transform 0.22s ease-out,
+        box-shadow 0.22s ease-out,
+        background 0.22s ease-out,
+        opacity 0.22s ease-out,
+        max-height 0.22s ease-out;
+      cursor: pointer;
+      overflow: hidden;
+      max-height: 110px; /* compact by default */
+    }
+
+    /* delete tiny dot */
+    .node-dot,
+  .node-year {
+  display: none;
+}
+
+    /* Little cyber corner accents */
+    .node-card::before,
+    .node-card::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(0, 229, 255, 0.6);
+    }
+    .node-card::before {
+      top: 6px;
+      right: 6px;
+      border-left: none;
+      border-bottom: none;
+    }
+    .node-card::after {
+      bottom: 6px;
+      left: 6px;
+      border-right: none;
+      border-top: none;
+    }
+
+    .node-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 6px;
+    }
+
+    .node-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .node-tag {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .node-body {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      opacity: 0.9;
+    }
+
+    .node-bullets {
+      margin-top: 6px;
+      opacity: 0.9;
+    }
+
+    /* Hover → expand */
+    .timeline-node:hover .node-card {
+      transform: translateY(-14px) scale(1.05);
+      box-shadow:
+        0 0 20px rgba(0, 229, 255, 0.9),
+        0 0 32px rgba(255, 59, 255, 0.7);
+      background: radial-gradient(circle at top left, rgba(0, 229, 255, 0.16), rgba(12, 20, 60, 0.98));
+      opacity: 1;
+      max-height: 230px;
+    }
+
+    /* ☕ Caffeine & Code badge */
+    .coffee-badge {
+      margin-top: 60px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .coffee-badge-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top left, rgba(0, 229, 255, 0.12), rgba(5, 12, 36, 0.96));
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      box-shadow:
+        0 0 12px rgba(0, 229, 255, 0.45),
+        0 0 26px rgba(0, 0, 0, 0.95);
+      max-width: 650px;
+    }
+
+    .coffee-icon {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.6));
+    }
+
+    .coffee-text {
+      font-size: 0.9rem;
+    }
+
+    .coffee-title {
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #7af8ff;
+      white-space: nowrap;
+    }
+
+    .coffee-text p {
+      margin: 2px 0 6px;
+      opacity: 0.9;
+    }
+
+    .coffee-text ul {
+      margin: 0;
+      padding-left: 16px;
+      list-style-type: none;
+    }
+
+    .coffee-text li {
+      margin-bottom: 2px;
+    }
+
+    .coffee-chip {
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.8rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      background: rgba(0, 229, 255, 0.08);
+    }
+
+    .cursor {
+      display: inline-block;
+      margin-left: 4px;
+      animation: blink-cursor 1s steps(2, start) infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes blink-cursor {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
 
     /* ---------- RECRUITER SCAN MODAL ---------- */
@@ -448,7 +714,7 @@
       outline: none;
     }
 
-    /* ---------- UTIL ---------- */
+    /* ---------- MISC / RESPONSIVE ---------- */
     .hidden {
       display: none;
     }
@@ -469,6 +735,64 @@
       #chatbot {
         left: 10px;
         right: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cyber-timeline {
+        padding: 40px 16px 32px;
+        min-height: auto;
+      }
+
+      .timeline-bar {
+        left: 50%;
+        right: auto;
+        width: 4px;
+        height: calc(100% - 80px);
+        top: 40px;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg, #00e5ff, #4f46e5, #ff3bff);
+      }
+
+      .timeline-node {
+        display: block;
+        min-width: auto;
+        margin: 40px 0;
+        text-align: left;
+      }
+
+      .node-dot {
+        margin: 0 auto;
+      }
+
+      .node-card {
+        position: relative;
+        margin: 12px auto 0;
+        transform: scale(0.96);
+        max-width: 320px;
+      }
+
+      .timeline-node:nth-child(odd) .node-card,
+      .timeline-node:nth-child(even) .node-card {
+        top: auto;
+        bottom: auto;
+      }
+
+      .timeline-node:hover .node-card {
+        transform: scale(1.02);
+      }
+
+      .node-year {
+        text-align: center;
+      }
+
+      .coffee-badge-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .coffee-title {
+        white-space: normal;
       }
     }
   </style>
@@ -503,25 +827,147 @@
       <div class="glass-card">
         <h2>About Me</h2>
         <p>
-          I am a cybersecurity student specializing in Incident Response, Automation,
-          AI-driven detection, Red Teaming, and secure systems engineering.
+          I am a University of Tulsa student majoring in Cybersecurity with specialization in Incident Response, Automation,
+          AI-driven detection, Red Teaming, and secure systems engineering. Feel free
+          to check out my projects, and special widgets such as recruiter terminal, AI
+          chatbot, and Recruiter Scanner. I'm passionate about bridging the gap between
+          cybersecurity operations and ML/AI integration. Looking forward to connecting!
         </p>
-        <!-- BUTTON ROW -->
+
         <div class="about-buttons">
           <a href="resumeSP26.pdf" target="_blank" class="btn resume-btn">View Resume</a>
           <a href="https://www.linkedin.com/in/bristie-rahman-833125254/" target="_blank" class="btn linkedin-btn">LinkedIn</a>
         </div>
+      </div>
+    </section>
 
-        <!-- PROFESSIONAL SUMMARY -->
-        <p class="about-summary">
-          I have hands-on industry experience across several areas of security, including working as a 
-          <strong>Security Compliance Analyst at OCII</strong> supporting GreenUAS/BlueUAS certification effort and penetration testing on drones,  
-          a <strong>Cybersecurity Intern at Mars</strong> developing phishing simulation runbooks and GenAI/Container Security Research efforts,  
-          a <strong>Risk Advisory IT Audit Intern at CBIZ</strong> assessing security controls and enterprise risk posture,  
-          and a <strong>SOC Analyst at TU</strong> investigating alerts, reviewing logs with syslog-ng and Armis, and performing threat hunting.
-          <br><br>
-          I also conduct research as an undergraduate, focusing on AI\ML bias, CAPTCHA cracking automation, and security-driven machine learning challenges.
-        </p>
+    <!-- EXPERIENCE / CYBERPUNK TIMELINE -->
+    <section id="experience" class="experience-cyber">
+      <h2>Experience</h2>
+      <p class="experience-intro">
+        A quick jump through compliance, offensive security, threat hunting, research, and a little Starbucks-fueled chaos.
+        Hover over each node on the timeline to see more.
+      </p>
+
+      <div class="cyber-timeline">
+        <div class="timeline-bar"></div>
+
+        <!-- OCII -->
+        <div class="timeline-node">
+          <div class="node-dot"></div>
+          <div class="node-card">
+            <div class="node-header">
+              <span class="node-title">🛰 Security Compliance Analyst</span>
+              <span class="node-tag">OCII · Tulsa, OK</span>
+            </div>
+            <div class="node-body">
+              <p>Assessed NIST-based controls across IT/OT and supported GreenUAS/BlueUAS drone security efforts.</p>
+              
+            </div>
+          </div>
+          <div class="node-year">OCII</div>
+        </div>
+
+        <!-- Mars -->
+        <div class="timeline-node">
+          <div class="node-dot"></div>
+          <div class="node-card">
+            <div class="node-header">
+              <span class="node-title">🛡️ Global Cybersecurity Intern</span>
+              <span class="node-tag">Mars Wrigley · Chicago, IL</span>
+            </div>
+            <div class="node-body">
+              <p>Supported phishing simulations, risk analysis, and GenAI / container security research.</p>
+              
+            </div>
+          </div>
+          <div class="node-year">Mars</div>
+        </div>
+
+        <!-- CBIZ -->
+        <div class="timeline-node">
+          <div class="node-dot"></div>
+          <div class="node-card">
+            <div class="node-header">
+              <span class="node-title">📊 Risk Advisory IT Audit Intern</span>
+              <span class="node-tag">CBIZ · Oklahoma City, OK</span>
+            </div>
+            <div class="node-body">
+              <p>Evaluated client security posture using NIST, CSC, and ISO frameworks.</p>
+              
+            </div>
+          </div>
+          <div class="node-year">CBIZ</div>
+        </div>
+
+        <!-- SOC Analyst -->
+        <div class="timeline-node">
+          <div class="node-dot"></div>
+          <div class="node-card">
+            <div class="node-header">
+              <span class="node-title">🔍 SOC Analyst</span>
+              <span class="node-tag">The University of Tulsa · Tulsa, OK</span>
+            </div>
+            <div class="node-body">
+              <p>Investigated alerts and hunted threats across campus infrastructure.</p>
+              
+            </div>
+          </div>
+          <div class="node-year">SOC</div>
+        </div>
+
+        <!-- Research -->
+        <div class="timeline-node">
+          <div class="node-dot"></div>
+          <div class="node-card">
+            <div class="node-header">
+              <span class="node-title">🧪 Undergraduate Researcher</span>
+              <span class="node-tag">AI/ML Bias · CAPTCHA · Security ML</span>
+            </div>
+            <div class="node-body">
+              <p>Study how AI systems break, bias, and can be attacked, with a focus on CAPTCHAs.</p>
+              
+            </div>
+          </div>
+          <div class="node-year">Research</div>
+        </div>
+
+        <!-- Starbucks -->
+        <div class="timeline-node">
+          <div class="node-dot"></div>
+          <div class="node-card">
+            <div class="node-header">
+              <span class="node-title">☕ Shift Lead / Barista</span>
+              <span class="node-tag">Starbucks · Tulsa, OK</span>
+            </div>
+            <div class="node-body">
+              <p>Led store operations, trained partners, and kept everyone caffeinated and calm.</p>
+
+          
+            </div>
+          </div>
+          <div class="node-year">Starbucks</div>
+        </div>
+      </div>
+
+      <!-- ☕ Caffeine & Code Badge -->
+      <div class="coffee-badge">
+        <div class="coffee-badge-inner">
+          <div class="coffee-icon">☕</div>
+          <div class="coffee-text">
+            <div class="coffee-title">
+              Caffeine-Powered Cyber Human<span class="cursor">|</span>
+            </div>
+            <p>
+              Sustained by Starbucks lattes, secure code commits, and “just one more” pull request.
+            </p>
+            <ul>
+              <li>Caffeine level: <span class="coffee-chip">CRITICAL</span></li>
+              <li>Favorite stack: <span class="coffee-chip">Peppermint Mocha × Keyboards × Firewalls</span></li>
+              <li>Policy: <span class="coffee-chip">No deploys before first latte.</span></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -601,9 +1047,7 @@
       <span class="terminal-title">~/recruiter_terminal</span>
       <button id="close-terminal-btn" aria-label="Close terminal">&times;</button>
     </div>
-    <div class="terminal-body" id="terminal-body">
-      <!-- Filled by JS -->
-    </div>
+    <div class="terminal-body" id="terminal-body"></div>
     <div class="terminal-input-row">
       <span class="prompt">bristie@portfolio:~$</span>
       <input type="text" id="terminal-input" autocomplete="off" />
@@ -824,7 +1268,6 @@
         const cmd = cmdRaw.trim();
         if (!cmd) return;
 
-        // Echo command
         printLine("bristie@portfolio:~$ " + cmd);
 
         if (cmd === "ls") {
@@ -853,7 +1296,6 @@
         }
       }
 
-      // Open / close
       openBtn.addEventListener("click", () => {
         terminal.classList.add("visible");
         if (!booted) {
@@ -867,7 +1309,6 @@
         terminal.classList.remove("visible");
       });
 
-      // Input
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           const value = input.value;
