@@ -1,966 +1,753 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bristie Rahman | AI & Cybersecurity Portfolio</title>
-
-  <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
   <style>
-    /* ---------- BASE ----------- */
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: "Inter", system-ui, sans-serif;
       background: #02030a;
       color: #ffffff;
       overflow-x: hidden;
+      cursor: none;
     }
-
-    /* ---------- STAR BACKGROUND (canvas) ---------- */
-    #bg-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -2;
+    /* CUSTOM CURSOR */
+    #cursor-dot {
+      position: fixed; width: 10px; height: 10px;
+      background: #00d4ff; border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      box-shadow: 0 0 8px #00d4ff, 0 0 16px #6a00ff;
     }
-
-    /* ---------- NAV ---------- */
+    #cursor-ring {
+      position: fixed; width: 28px; height: 28px;
+      border: 1.5px solid rgba(0,212,255,0.6);
+      border-radius: 50%; pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .2s ease, height .2s ease, border-color .2s ease;
+    }
+    .cursor-ring-expand { width: 44px !important; height: 44px !important; border-color: #ff3bff !important; }
+    .trail-particle {
+      position: fixed; pointer-events: none; border-radius: 50%; z-index: 9990;
+      transform: translate(-50%,-50%);
+      animation: trail-fade 0.65s ease-out forwards;
+    }
+    @keyframes trail-fade {
+      0%   { opacity: 0.85; transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0;    transform: translate(-50%,-50%) scale(0.1); }
+    }
+    /* STAR BG */
+    #bg-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: -2; }
+    /* NAV */
     nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
       padding: 14px 32px;
-      background: radial-gradient(circle at top, rgba(0, 188, 255, 0.08), transparent),
-                  rgba(3, 6, 24, 0.96);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(14px);
+      background: radial-gradient(circle at top,rgba(0,188,255,.08),transparent), rgba(3,6,24,.96);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      position: sticky; top: 0; z-index: 10; backdrop-filter: blur(14px);
     }
-
-    .logo {
-      font-weight: 700;
-      letter-spacing: 0.09em;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      color: #9be7ff;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nav-links a {
-      color: #e3f2fd;
-      text-decoration: none;
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-
-    .nav-links a:hover {
-      opacity: 1;
-      text-shadow: 0 0 6px #00d4ff;
-    }
-
-    /* ---------- HERO ---------- */
+    .logo { font-weight:700; letter-spacing:.09em; font-size:.95rem; text-transform:uppercase; color:#9be7ff; }
+    .nav-links { list-style:none; display:flex; gap:20px; margin:0; padding:0; }
+    .nav-links a { color:#e3f2fd; text-decoration:none; font-size:.9rem; opacity:.9; cursor:none; }
+    .nav-links a:hover { opacity:1; text-shadow:0 0 6px #00d4ff; }
+    /* HERO */
     .hero {
-      position: relative;
-      min-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 80px 20px 40px;
-      text-align: center;
-      overflow: hidden;
+      position:relative; min-height:90vh; display:flex; flex-direction:column;
+      justify-content:center; align-items:center; padding:80px 20px 40px; text-align:center; overflow:hidden;
     }
-
     .hologram-overlay {
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          rgba(0, 255, 255, 0.08),
-          rgba(0, 255, 255, 0.08) 1px,
-          transparent 1px,
-          transparent 3px
-        );
-      opacity: 0.2;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      animation: holo-scan 6s infinite linear;
-      z-index: -1;
+      position:absolute; inset:0;
+      background:repeating-linear-gradient(to bottom,rgba(0,255,255,.08),rgba(0,255,255,.08) 1px,transparent 1px,transparent 3px);
+      opacity:.2; mix-blend-mode:screen; pointer-events:none;
+      animation:holo-scan 6s infinite linear; z-index:-1;
     }
-
-    @keyframes holo-scan {
-      0% { transform: translateY(-10%); opacity: 0.1; }
-      50% { opacity: 0.25; }
-      100% { transform: translateY(10%); opacity: 0.1; }
-    }
-
+    @keyframes holo-scan { 0%{transform:translateY(-10%);opacity:.1} 50%{opacity:.25} 100%{transform:translateY(10%);opacity:.1} }
     .hero-title {
-      font-size: clamp(2.8rem, 5vw, 3.8rem);
-      background: linear-gradient(120deg, #00d4ff, #6a00ff);
-      -webkit-background-clip: text;
-      color: transparent;
-      animation: glow 3s infinite ease-in-out;
-      margin-bottom: 8px;
+      font-size:clamp(2.8rem,5vw,3.8rem);
+      background:linear-gradient(120deg,#00d4ff,#6a00ff); -webkit-background-clip:text; color:transparent;
+      animation:glow 3s infinite ease-in-out; margin-bottom:8px;
     }
-
-    .hero-subtitle {
-      font-weight: 400;
-      font-size: 1.1rem;
-      color: #cfefff;
-      opacity: 0.9;
-    }
-
-    @keyframes glow {
-      0% { filter: drop-shadow(0 0 4px #6a00ff); }
-      50% { filter: drop-shadow(0 0 14px #00d4ff); }
-      100% { filter: drop-shadow(0 0 4px #6a00ff); }
-    }
-
-    .hero-buttons {
-      margin-top: 26px;
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    /* ---------- BUTTONS ---------- */
+    .hero-subtitle { font-weight:400; font-size:1.1rem; color:#cfefff; opacity:.9; }
+    @keyframes glow { 0%{filter:drop-shadow(0 0 4px #6a00ff)} 50%{filter:drop-shadow(0 0 14px #00d4ff)} 100%{filter:drop-shadow(0 0 4px #6a00ff)} }
+    .hero-buttons { margin-top:26px; display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
     .cta-btn {
-      background: linear-gradient(135deg, #6a00ff, #00d4ff);
-      padding: 13px 26px;
-      border-radius: 999px;
-      color: white;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-      font-size: 0.95rem;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
+      background:linear-gradient(135deg,#6a00ff,#00d4ff); padding:13px 26px; border-radius:999px;
+      color:white; font-weight:600; border:none; cursor:none;
+      transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
+      font-size:.95rem; letter-spacing:.03em; text-transform:uppercase;
     }
-
-    .cta-btn.secondary {
-      background: rgba(4, 10, 40, 0.9);
-      border: 1px solid rgba(0, 212, 255, 0.5);
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
-      filter: brightness(1.07);
-    }
-
-    /* ---------- SECTIONS & CARDS ---------- */
-    .section {
-      padding: 60px 20px;
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
+    .cta-btn.secondary { background:rgba(4,10,40,.9); border:1px solid rgba(0,212,255,.5); }
+    .cta-btn:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 10px 26px rgba(0,0,0,.6); filter:brightness(1.07); }
+    /* SECTIONS */
+    .section { padding:60px 20px; max-width:960px; margin:0 auto; }
+    .section-title { text-align:center; margin-bottom:24px; }
     .glass-card {
-      backdrop-filter: blur(18px);
-      background: rgba(16, 25, 60, 0.75);
-      border-radius: 18px;
-      padding: 24px;
-      margin: 12px auto;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter:blur(18px); background:rgba(16,25,60,.75);
+      border-radius:18px; padding:24px; margin:12px auto;
+      border:1px solid rgba(255,255,255,.12); box-shadow:0 16px 35px rgba(0,0,0,.55);
     }
-
-    .about-buttons {
-      margin-top: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 22px;
-    }
-
-    .project-card {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .project-card p {
-      font-size: 0.9rem;
-      color: #c9e6ff;
-    }
-
-    /* hacker hover */
+    .about-buttons { margin-top:18px; display:flex; flex-wrap:wrap; gap:12px; }
+    .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px; }
+    .project-card { position:relative; overflow:hidden; }
+    .project-card p { font-size:.9rem; color:#c9e6ff; }
     .project-card::before {
-      content: "010101\n101010\n001100";
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      font-family: "Courier New", monospace;
-      white-space: pre;
-      font-size: 0.7rem;
-      line-height: 0.9rem;
-      color: rgba(0, 250, 154, 0.85);
-      pointer-events: none;
-      transform: translateY(10px);
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      mix-blend-mode: screen;
+      content:"010101\n101010\n001100"; position:absolute; inset:0; opacity:0;
+      font-family:"Courier New",monospace; white-space:pre; font-size:.7rem; line-height:.9rem;
+      color:rgba(0,250,154,.85); pointer-events:none; transform:translateY(10px);
+      transition:opacity .25s ease,transform .25s ease; mix-blend-mode:screen;
     }
-
-    .project-card:hover::before {
-      opacity: 0.32;
-      transform: translateY(0);
-    }
-
+    .project-card:hover::before { opacity:.32; transform:translateY(0); }
     .btn {
-      display: inline-block;
-      padding: 9px 18px;
-      margin-top: 12px;
-      border-radius: 999px;
-      background: #00aaff;
-      color: #000;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
+      display:inline-block; padding:9px 18px; margin-top:12px; border-radius:999px;
+      background:#00aaff; color:#000; text-decoration:none; font-size:.85rem; font-weight:600; cursor:none;
     }
-
-    .btn:hover {
-      background: #00c2ff;
+    .btn:hover { background:#00c2ff; }
+    /* TIMELINE */
+    .experience-cyber { max-width:1100px; margin:80px auto 0; padding:0 24px 0; text-align:center; }
+    .experience-cyber h2 { font-size:2.2rem; margin-bottom:10px; }
+    .experience-intro { max-width:720px; line-height:1.6; opacity:.85; margin:0 auto 40px; }
+    .cyber-timeline {
+      position:relative; margin-top:70px; padding:140px 20px 120px;
+      display:grid; grid-template-columns:repeat(7,1fr);
+      align-items:center; overflow:visible;
+      min-width:0;
     }
-
-    .project-link {
-      color: #000;
-    }
-
-    /* ---------- EXPERIENCE / CYBERPUNK TIMELINE ---------- */
-    .experience-cyber {
-      max-width: 1100px;
-      margin: 80px auto;
-      padding: 0 24px 60px;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      text-align: center;
-    }
-
-    .experience-cyber h2 {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
-    }
-
-    .experience-intro {
-      max-width: 720px;
-      line-height: 1.6;
-      opacity: 0.85;
-      margin: 0 auto 40px; 
-    }
-
-      .cyber-timeline {
-      position: relative;
-      margin-top: 70px;
-
-      padding: 130px 40px 110px;
-
-      display: grid;
-      grid-template-columns: repeat(6, 1fr); /* 6 equal slots */
-      align-items: center;
-
-      background: transparent;
-      overflow: visible;
-    }
-
     .timeline-bar {
-      position: absolute;
-      left: 40px;
-      right: 40px;
-      top: 50%;
-      height: 4px;
-      transform: translateY(-50%);
-      background: linear-gradient(90deg, #00e5ff, #4f46e5, #ff3bff);
-      box-shadow: 0 0 18px rgba(0, 229, 255, 0.7);
-      border-radius: 999px;
+      position:absolute; left:20px; right:20px; top:50%; height:4px;
+      transform:translateY(-50%);
+      background:linear-gradient(90deg,#00e5ff,#4f46e5,#ff3bff);
+      box-shadow:0 0 18px rgba(0,229,255,.7); border-radius:999px;
     }
-
     .timeline-node {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      min-width: 0%;    
-      margin: 0 40px;      
-    } 
-
-    /* Alternating top/bottom card placement */
-    .timeline-node:nth-child(odd) .node-card {
-      bottom: 140%;
+      position:relative; display:flex; flex-direction:column;
+      justify-content:center; align-items:center; min-width:0; margin:0;
     }
-
-    .timeline-node:nth-child(even) .node-card {
-      top: 140%;
+    /* Anchor point dot (invisible but positions the card) */
+    .timeline-node-anchor {
+      width:12px; height:12px; border-radius:50%; flex-shrink:0;
+      background:rgba(0,229,255,.3); position:relative; z-index:2;
     }
-
-    .node-dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #00e5ff 0%, #4f46e5 60%, transparent 70%);
-      box-shadow:
-        0 0 12px rgba(0, 229, 255, 0.9),
-        0 0 24px rgba(79, 70, 229, 0.8);
-      position: relative;
-      z-index: 2;
-    }
-
-    .node-year {
-      margin-top: 10px;
-      font-family: "JetBrains Mono", "Fira Code", monospace;
-      font-size: 0.8rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      opacity: 0.8;
-    }
-
+    .timeline-node:nth-child(odd)  .node-card { bottom:calc(100% + 18px); top:auto; }
+    .timeline-node:nth-child(even) .node-card { top:calc(100% + 18px); bottom:auto; }
+    .node-dot,.node-year { display:none; }
     .node-card {
-      position: absolute;
-      width: 230px;
-      max-width: 260px;
-      padding: 10px 12px;
-      border-radius: 14px;
-
-        /* SOLID cyberpunk card (no translucency) */
-        background: linear-gradient(135deg, #050b24, #0b1038);
-        border: 1px solid rgba(0, 229, 255, 0.65);
-        box-shadow:
-          0 0 16px rgba(0, 229, 255, 0.4),
-          0 0 28px rgba(0, 0, 0, 0.95);
-
-  transform: translateY(-10px) scale(0.9);
-  opacity: 1;  /* fully opaque now */
-
-      transition:
-        transform 0.22s ease-out,
-        box-shadow 0.22s ease-out,
-        background 0.22s ease-out,
-        opacity 0.22s ease-out,
-        max-height 0.22s ease-out;
-      cursor: pointer;
-      overflow: hidden;
-      max-height: 110px; /* compact by default */
+      position:absolute; width:250px; padding:10px 12px; border-radius:14px;
+      background:linear-gradient(135deg,#050b24,#0b1038);
+      border:1px solid rgba(0,229,255,.65);
+      box-shadow:0 0 16px rgba(0,229,255,.4),0 0 28px rgba(0,0,0,.95);
+      transform:scale(.95); opacity:1;
+      transition:transform .22s ease-out,box-shadow .22s ease-out,background .22s ease-out,max-height .22s ease-out;
+      cursor:pointer; overflow:hidden; max-height:115px;
+      left:50%; transform:translateX(-50%) scale(.95);
     }
-
-    /* delete tiny dot */
-    .node-dot,
-  .node-year {
-  display: none;
-}
-
-    /* Little cyber corner accents */
-    .node-card::before,
-    .node-card::after {
-      content: "";
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border: 1px solid rgba(0, 229, 255, 0.6);
+    .node-card.pentest {
+      border-color:rgba(255,59,255,.8);
+      box-shadow:0 0 16px rgba(255,59,255,.5),0 0 28px rgba(0,0,0,.95);
     }
-    .node-card::before {
-      top: 6px;
-      right: 6px;
-      border-left: none;
-      border-bottom: none;
+    .node-card::before,.node-card::after {
+      content:""; position:absolute; width:18px; height:18px;
+      border:1px solid rgba(0,229,255,.6);
     }
-    .node-card::after {
-      bottom: 6px;
-      left: 6px;
-      border-right: none;
-      border-top: none;
-    }
-
-    .node-header {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      margin-bottom: 6px;
-    }
-
-    .node-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .node-tag {
-      font-size: 0.75rem;
-      opacity: 0.8;
-    }
-
-    .node-body {
-      font-size: 0.78rem;
-      line-height: 1.5;
-      opacity: 0.9;
-    }
-
-    .node-bullets {
-      margin-top: 6px;
-      opacity: 0.9;
-    }
-
-    /* Hover → expand */
+    .node-card.pentest::before,.node-card.pentest::after { border-color:rgba(255,59,255,.6); }
+    .node-card::before { top:6px; right:6px; border-left:none; border-bottom:none; }
+    .node-card::after  { bottom:6px; left:6px; border-right:none; border-top:none; }
+    .node-header { display:flex; flex-direction:column; gap:2px; margin-bottom:6px; }
+    .node-title { font-size:.9rem; font-weight:700; }
+    .node-tag   { font-size:.75rem; opacity:.8; }
+    .node-body  { font-size:.78rem; line-height:1.5; opacity:.9; }
     .timeline-node:hover .node-card {
-      transform: translateY(-14px) scale(1.05);
-      box-shadow:
-        0 0 20px rgba(0, 229, 255, 0.9),
-        0 0 32px rgba(255, 59, 255, 0.7);
-      background: radial-gradient(circle at top left, rgba(0, 229, 255, 0.16), rgba(12, 20, 60, 0.98));
-      opacity: 1;
-      max-height: 230px;
+      transform:translateX(-50%) scale(1.06);
+      box-shadow:0 0 20px rgba(0,229,255,.9),0 0 32px rgba(255,59,255,.7);
+      background:radial-gradient(circle at top left,rgba(0,229,255,.16),rgba(12,20,60,.98));
+      max-height:240px;
     }
-
-    /* ☕ Caffeine & Code badge */
-    .coffee-badge {
-      margin-top: 60px;
-      display: flex;
-      justify-content: center;
+    .incoming-badge {
+      display:inline-block; font-size:.65rem; padding:2px 7px; border-radius:999px;
+      background:linear-gradient(90deg,rgba(255,59,255,.25),rgba(0,229,255,.2));
+      border:1px solid rgba(255,59,255,.7); color:#ff9fff;
+      font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-top:3px;
+      animation:badge-pulse 2s infinite ease-in-out;
     }
-
+    @keyframes badge-pulse {
+      0%,100%{box-shadow:0 0 4px rgba(255,59,255,.4)}
+      50%{box-shadow:0 0 12px rgba(255,59,255,.9)}
+    }
+    /* COFFEE BADGE */
+    .coffee-badge { margin:60px 0; display:flex; justify-content:center; }
     .coffee-badge-inner {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 18px;
-      border-radius: 14px;
-      background: radial-gradient(circle at top left, rgba(0, 229, 255, 0.12), rgba(5, 12, 36, 0.96));
-      border: 1px solid rgba(0, 229, 255, 0.3);
-      box-shadow:
-        0 0 12px rgba(0, 229, 255, 0.45),
-        0 0 26px rgba(0, 0, 0, 0.95);
-      max-width: 650px;
+      display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:14px;
+      background:radial-gradient(circle at top left,rgba(0,229,255,.12),rgba(5,12,36,.96));
+      border:1px solid rgba(0,229,255,.3);
+      box-shadow:0 0 12px rgba(0,229,255,.45),0 0 26px rgba(0,0,0,.95); max-width:650px;
     }
-
-    .coffee-icon {
-      font-size: 2rem;
-      filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.6));
-    }
-
-    .coffee-text {
-      font-size: 0.9rem;
-    }
-
-    .coffee-title {
-      font-family: "JetBrains Mono", "Fira Code", monospace;
-      font-size: 0.95rem;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #7af8ff;
-      white-space: nowrap;
-    }
-
-    .coffee-text p {
-      margin: 2px 0 6px;
-      opacity: 0.9;
-    }
-
-    .coffee-text ul {
-      margin: 0;
-      padding-left: 16px;
-      list-style-type: none;
-    }
-
-    .coffee-text li {
-      margin-bottom: 2px;
-    }
-
-    .coffee-chip {
-      font-family: "JetBrains Mono", "Fira Code", monospace;
-      font-size: 0.8rem;
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(0, 229, 255, 0.4);
-      background: rgba(0, 229, 255, 0.08);
-    }
-
-    .cursor {
-      display: inline-block;
-      margin-left: 4px;
-      animation: blink-cursor 1s steps(2, start) infinite;
-      opacity: 0.8;
-    }
-
-    @keyframes blink-cursor {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-
-    /* ---------- RECRUITER SCAN MODAL ---------- */
+    .coffee-icon { font-size:2rem; filter:drop-shadow(0 0 6px rgba(0,229,255,.6)); }
+    .coffee-text { font-size:.9rem; }
+    .coffee-title { font-family:"Fira Code",monospace; font-size:.95rem; margin-bottom:4px; text-transform:uppercase; letter-spacing:.06em; color:#7af8ff; }
+    .coffee-text p { margin:2px 0 6px; opacity:.9; }
+    .coffee-text ul { margin:0; padding-left:16px; list-style-type:none; }
+    .coffee-text li { margin-bottom:2px; }
+    .coffee-chip { font-family:"Fira Code",monospace; font-size:.8rem; padding:2px 6px; border-radius:999px; border:1px solid rgba(0,229,255,.4); background:rgba(0,229,255,.08); }
+    .blink-cursor { display:inline-block; margin-left:4px; animation:blink-cur 1s steps(2,start) infinite; }
+    @keyframes blink-cur { 0%,49%{opacity:1} 50%,100%{opacity:0} }
     #scanModal {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(1, 2, 10, 0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      z-index: 999;
+      position:fixed; inset:0; background:rgba(1,2,10,.9);
+      display:none; justify-content:center; align-items:center; z-index:999;
     }
-
     #scanBox {
-      width: min(420px, 90vw);
-      padding: 28px 22px;
-      background: radial-gradient(circle at top, rgba(0, 212, 255, 0.24), rgba(18, 26, 70, 0.95));
-      border-radius: 16px;
-      text-align: center;
-      animation: pulse 2s infinite;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.75);
+      width:min(420px,90vw); padding:28px 22px;
+      background:radial-gradient(circle at top,rgba(0,212,255,.24),rgba(18,26,70,.95));
+      border-radius:16px; text-align:center; animation:modal-pulse 2s infinite;
+      border:1px solid rgba(255,255,255,.22); box-shadow:0 20px 40px rgba(0,0,0,.75);
     }
-
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 212, 255, 0.3); }
-      50% { transform: scale(1.02); box-shadow: 0 0 32px rgba(0, 212, 255, 0.55); }
-      100% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 212, 255, 0.3); }
-    }
-
-    /* ---------- TERMINAL WIDGET ---------- */
+    @keyframes modal-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02);box-shadow:0 0 32px rgba(0,212,255,.55)} }
+    /* TERMINAL */
     .terminal {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      width: 340px;
-      max-width: calc(100vw - 40px);
-      background: radial-gradient(circle at top left, rgba(0, 255, 255, 0.2), rgba(3, 5, 20, 0.98));
-      border-radius: 14px;
-      border: 1px solid rgba(0, 255, 255, 0.35);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
-      display: flex;
-      flex-direction: column;
+      position:fixed; bottom:80px; left:20px; width:340px; max-width:calc(100vw - 40px);
+      background:radial-gradient(circle at top left,rgba(0,255,255,.2),rgba(3,5,20,.98));
+      border-radius:14px; border:1px solid rgba(0,255,255,.35);
+      box-shadow:0 20px 50px rgba(0,0,0,.85);
+      display:flex; flex-direction:column; overflow:hidden; z-index:50;
+      opacity:0; pointer-events:none;
+      transform:translateY(12px) scale(.98);
+      transition:opacity .2s ease,transform .2s ease;
+      font-family:"Courier New",monospace;
+    }
+    .terminal.visible { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+    .terminal-header {
+      display:flex; align-items:center; justify-content:space-between; padding:6px 10px;
+      background:rgba(4,10,40,.95); border-bottom:1px solid rgba(255,255,255,.12);
+      cursor:move; font-size:.75rem;
+    }
+    .terminal-title { color:#9be7ff; }
+    .terminal-header button { background:transparent; border:none; color:#fff; font-size:1.1rem; cursor:none; }
+    .terminal-body {
+      font-size:.8rem; padding:10px; height:170px; overflow-y:auto; color:#e0f7fa; position:relative;
+    }
+    .terminal-body::before {
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background:repeating-linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.2) 1px,transparent 1px,transparent 3px);
+      mix-blend-mode:soft-light; opacity:.4;
+    }
+    .terminal-line { position:relative; z-index:1; }
+    .terminal-input-row {
+      display:flex; align-items:center; padding:6px 8px 8px; gap:6px;
+      background:rgba(3,9,30,.96); border-top:1px solid rgba(255,255,255,.14);
+    }
+    .prompt { font-size:.72rem; color:#80deea; }
+    #terminal-input { flex:1; background:transparent; border:none; outline:none; color:#fff; font-size:.8rem; cursor:none; }
+    .terminal-hint  { color:#81c784; }
+    .terminal-error { color:#ff8a80; }
+    /* AI CHATBOT FAB */
+    #chatbot-fab {
+      position:fixed; bottom:22px; right:22px;
+      width:58px; height:58px; border-radius:50%;
+      background:linear-gradient(135deg,#6a00ff,#00d4ff);
+      border:none; cursor:none; z-index:40;
+      display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+      box-shadow:0 0 20px rgba(0,212,255,.5),0 0 40px rgba(106,0,255,.3);
+      transition:transform .2s ease;
+      animation:fab-breathe 3s infinite ease-in-out;
+    }
+    #chatbot-fab:hover { transform:scale(1.1); }
+    @keyframes fab-breathe {
+      0%,100%{box-shadow:0 0 20px rgba(0,212,255,.5),0 0 40px rgba(106,0,255,.3)}
+      50%{box-shadow:0 0 32px rgba(0,212,255,.8),0 0 60px rgba(106,0,255,.6)}
+    }
+    /* CHAT PANEL */
+    #chat-panel {
+      position:fixed; bottom:92px; right:22px; width:360px; max-width:calc(100vw - 44px);
+      background:rgba(4,8,30,.97); backdrop-filter:blur(20px);
+      border-radius:20px; border:1px solid rgba(0,212,255,.3);
+      box-shadow:0 24px 60px rgba(0,0,0,.9),0 0 40px rgba(0,212,255,.08);
+      display:flex; flex-direction:column; overflow:hidden; z-index:41;
+      opacity:0; pointer-events:none; transform:translateY(16px) scale(.96);
+      transition:opacity .22s ease,transform .22s ease;
+    }
+    #chat-panel.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+    .chat-header {
+      display:flex; align-items:center; justify-content:space-between; padding:13px 16px;
+      background:linear-gradient(90deg,rgba(106,0,255,.35),rgba(0,212,255,.15));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .chat-header-left { display:flex; align-items:center; gap:10px; }
+    .chat-avatar-lg {
+      width:34px; height:34px; border-radius:50%;
+      background:linear-gradient(135deg,#6a00ff,#00d4ff);
+      display:flex; align-items:center; justify-content:center; font-size:1rem;
+      box-shadow:0 0 10px rgba(0,212,255,.5);
+    }
+    .chat-name   { font-size:.9rem; font-weight:600; color:#9be7ff; }
+    .chat-status { font-size:.68rem; color:#81c784; }
+    .chat-close  { background:transparent; border:none; color:#888; font-size:1.2rem; cursor:none; transition:color .15s; }
+    .chat-close:hover { color:#fff; }
+    #chat-messages {
+      flex:1; overflow-y:auto; padding:14px 12px 8px;
+      display:flex; flex-direction:column; gap:10px;
+      min-height:200px; max-height:300px;
+      scrollbar-width:thin; scrollbar-color:rgba(0,212,255,.25) transparent;
+    }
+    .chat-msg { display:flex; gap:8px; align-items:flex-start; }
+    .chat-msg.user { flex-direction:row-reverse; }
+    .chat-bubble {
+      max-width:84%; padding:9px 13px; border-radius:16px;
+      font-size:.82rem; line-height:1.55;
+    }
+    .chat-msg.ai   .chat-bubble { background:rgba(0,212,255,.09); border:1px solid rgba(0,212,255,.22); color:#c9e6ff; border-top-left-radius:4px; }
+    .chat-msg.user .chat-bubble { background:linear-gradient(135deg,rgba(106,0,255,.4),rgba(0,212,255,.18)); border:1px solid rgba(106,0,255,.4); color:#fff; border-top-right-radius:4px; }
+    .chat-av-sm {
+      width:26px; height:26px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center; font-size:.75rem;
+    }
+    .chat-msg.ai   .chat-av-sm { background:linear-gradient(135deg,#6a00ff,#00d4ff); }
+    .chat-msg.user .chat-av-sm { background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); }
+    .typing-indicator { display:flex; gap:4px; align-items:center; padding:2px 0; }
+    .typing-dot { width:6px; height:6px; border-radius:50%; background:#00d4ff; opacity:.6; animation:t-bounce 1.2s infinite; }
+    .typing-dot:nth-child(2){animation-delay:.2s}
+    .typing-dot:nth-child(3){animation-delay:.4s}
+    @keyframes t-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px);opacity:1} }
+    .chat-input-row {
+      display:flex; gap:8px; padding:10px 12px;
+      border-top:1px solid rgba(255,255,255,.08); background:rgba(2,5,18,.85);
+    }
+    #chat-input {
+      flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(0,212,255,.2);
+      border-radius:10px; padding:8px 12px; color:#fff; font-size:.82rem; outline:none; cursor:none;
+      transition:border-color .15s;
+    }
+    #chat-input:focus { border-color:rgba(0,212,255,.5); }
+    #chat-send {
+      background:linear-gradient(135deg,#6a00ff,#00d4ff); border:none; border-radius:10px;
+      width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+      cursor:none; color:white; font-size:.95rem; transition:transform .15s,filter .15s;
+    }
+    #chat-send:hover { transform:scale(1.06); filter:brightness(1.1); }
+    .chat-disclaimer { font-size:.65rem; text-align:center; color:rgba(255,255,255,.25); padding:4px 12px 8px; }
+    /* RESPONSIVE */
+    @media(max-width:600px){
+      nav{flex-direction:column;gap:8px;padding-inline:18px;}
+      .terminal{left:10px;right:10px;width:auto;}
+      #chat-panel{left:10px;right:10px;width:auto;}
+      #chatbot-fab{right:14px;}
+    }
+    @media(max-width:520px){
+      .cyber-timeline{
+        padding:24px 16px 24px;
+        display:flex; flex-direction:column; align-items:center; gap:0;
+      }
+      .timeline-bar{
+        left:50%; right:auto; width:4px;
+        top:0; bottom:0; height:100%;
+        transform:translateX(-50%);
+        background:linear-gradient(180deg,#00e5ff,#4f46e5,#ff3bff);
+      }
+      .timeline-node{
+        width:100%; display:flex; flex-direction:row; align-items:flex-start;
+        min-width:auto; margin:0; padding:20px 0;
+      }
+      .timeline-node-anchor{ margin: 6px 16px 0 calc(50% - 6px); flex-shrink:0; }
+      .node-card{
+        position:relative; left:auto; top:auto; bottom:auto;
+        transform:none; width:calc(100% - 80px); max-width:320px;
+        margin-left:16px;
+      }
+      .timeline-node:nth-child(odd)  .node-card,
+      .timeline-node:nth-child(even) .node-card{ top:auto; bottom:auto; }
+      .timeline-node:hover .node-card{ transform:scale(1.02); }
+      .coffee-badge-inner{flex-direction:column;align-items:flex-start;}
+    }
+    /* ---- SCROLL SECTION BACKGROUNDS ---- */
+    .section-bg-transition {
+      transition: background 1.2s ease;
+    }
+    body.zone-experience { --zone-color: rgba(4,12,40,0.95); }
+    body.zone-projects   { --zone-color: rgba(8,4,30,0.95); }
+
+    /* ---- BOOT LOG ---- */
+    .circuit-overlay {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      opacity: 0; transition: opacity 2s ease;
+      background-image:
+        linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .circuit-overlay.visible { opacity: 1; }
+
+    /* Binary rain — very subtle, won't overpower content */
+    #binary-rain {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      opacity: 0; transition: opacity 2.5s ease;
       overflow: hidden;
-      z-index: 50;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(12px) scale(0.98);
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      font-family: "Courier New", monospace;
+      font-size: .7rem; color: rgba(0,229,255,.09);
+      display: flex; gap: 22px;
+    }
+    #binary-rain.visible { opacity: 1; }
+    .binary-col {
+      display: flex; flex-direction: column;
+      animation: bin-fall linear infinite;
+      white-space: pre; line-height: 1.4rem;
+      user-select: none;
+    }
+    @keyframes bin-fall {
+      0%   { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+
+    /* Projects zone: subtle deep purple radial */
+    #projects-glow {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      opacity: 0; transition: opacity 2s ease;
+      background: radial-gradient(ellipse at 50% 80%, rgba(60,0,100,.22) 0%, transparent 65%);
+    }
+    #projects-glow.visible { opacity: 1; }
+
+    /* Main background color shift — very slow and seamless */
+    #section-overlay {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      transition: background 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+      background: transparent;
+    }
+
+    /* ---- BOOT LOG ---- */
+    .boot-card { font-family: "Courier New", monospace; }
+    .boot-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0,229,255,.2);
+    }
+    .boot-label { font-size: .75rem; color: #7af8ff; letter-spacing: .1em; text-transform: uppercase; }
+    .boot-status-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #00ff88;
+      box-shadow: 0 0 8px #00ff88; animation: status-blink 1.5s infinite;
+    }
+    @keyframes status-blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .boot-output { display: flex; flex-direction: column; gap: 5px; min-height: 180px; }
+    .boot-line {
+      font-size: .85rem; line-height: 1.5; opacity: 0;
+      animation: boot-appear .3s ease forwards;
+    }
+    @keyframes boot-appear { to { opacity: 1; } }
+    .boot-ok    { color: #00ff88; }
+    .boot-warn  { color: #ffcc00; }
+    .boot-info  { color: #9be7ff; }
+    .boot-dim   { color: rgba(255,255,255,.5); font-size:.78rem; }
+
+    /* ---- COMPLIANCE VIEW ---- */
+    .compliance-tag {
+      display: none; flex-wrap: wrap; gap: 4px; margin-top: 8px;
+    }
+    .compliance-tag span {
+      font-size: .65rem; padding: 2px 7px; border-radius: 4px;
+      background: rgba(0,255,136,.1); border: 1px solid rgba(0,255,136,.4);
+      color: #00ff88; font-family: "Courier New", monospace;
+      letter-spacing: .05em;
+    }
+    body.compliance-mode .compliance-tag { display: flex; }
+    body.compliance-mode .project-card {
+      border-color: rgba(0,255,136,.4) !important;
+      box-shadow: 0 0 12px rgba(0,255,136,.2), 0 16px 35px rgba(0,0,0,.55) !important;
+    }
+    body.compliance-mode .project-card strong::after {
+      content: " ✓"; color: #00ff88; font-size:.8rem;
+    }
+
+    /* ---- SECURE CONTACT TERMINAL ---- */
+    #contact-terminal {
+      position: fixed; inset: 0; background: rgba(1,2,10,.95);
+      display: none; justify-content: center; align-items: center; z-index: 998;
+    }
+    #contact-terminal.open { display: flex; }
+    .contact-term-box {
+      width: min(500px, 92vw);
+      background: radial-gradient(circle at top, rgba(0,212,255,.12), rgba(3,6,24,.98));
+      border: 1px solid rgba(0,229,255,.4);
+      border-radius: 18px; overflow: hidden;
+      box-shadow: 0 0 40px rgba(0,212,255,.3), 0 24px 60px rgba(0,0,0,.9);
       font-family: "Courier New", monospace;
     }
-
-    .terminal.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0) scale(1);
+    .contact-term-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 16px;
+      background: rgba(4,10,40,.95);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: .75rem; color: #9be7ff;
     }
-
-    .terminal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 10px;
-      background: rgba(4, 10, 40, 0.95);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-      cursor: move;
-      font-size: 0.75rem;
+    .contact-term-header button { background:transparent;border:none;color:#fff;font-size:1.1rem;cursor:none; }
+    .contact-term-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .contact-step { display: none; }
+    .contact-step.active { display: block; }
+    .contact-prompt { font-size: .8rem; color: #7af8ff; margin-bottom: 8px; }
+    .contact-input {
+      width: 100%; background: rgba(0,229,255,.05);
+      border: 1px solid rgba(0,229,255,.3); border-radius: 8px;
+      padding: 9px 12px; color: #fff; font-family: "Courier New", monospace;
+      font-size: .85rem; outline: none; cursor: none;
     }
-
-    .terminal-title {
-      color: #9be7ff;
+    .contact-input:focus { border-color: rgba(0,229,255,.7); }
+    .contact-btn {
+      margin-top: 10px; padding: 9px 20px; border-radius: 999px;
+      background: linear-gradient(135deg,#6a00ff,#00d4ff);
+      border: none; color: #fff; font-size: .85rem; font-weight: 600;
+      cursor: none; transition: filter .15s;
     }
-
-    .terminal-header button {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.1rem;
-      cursor: pointer;
+    .contact-btn:hover { filter: brightness(1.1); }
+    .contact-success {
+      text-align: center; padding: 20px 0;
+      animation: packet-send 1s ease forwards;
     }
+    @keyframes packet-send {
+      0%   { opacity:0; transform: scale(.9); }
+      60%  { transform: scale(1.04); }
+      100% { opacity:1; transform: scale(1); }
+    }
+    .packet-icon { font-size: 3rem; margin-bottom: 12px; }
+    .packet-title { font-size: 1.1rem; color: #00ff88; margin-bottom: 8px; font-weight: 700; }
+    .packet-id { font-size: .75rem; color: #7af8ff; opacity: .8; }
 
-    .terminal-body {
-      font-size: 0.8rem;
-      padding: 10px;
-      height: 170px;
+    /* ---- ESCAPE ROOM ---- */
+    #escape-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #000;
+      display: none; flex-direction: column;
+      font-family: "Courier New", monospace;
       overflow-y: auto;
-      color: #e0f7fa;
-      position: relative;
+    }
+    #escape-overlay.open { display: flex; }
+    .escape-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 24px;
+      background: rgba(255,0,0,.08);
+      border-bottom: 1px solid rgba(255,0,0,.3);
+    }
+    .escape-title { color: #ff3b3b; font-size: 1rem; letter-spacing: .15em; text-transform: uppercase; }
+    .escape-progress { display: flex; gap: 8px; align-items: center; font-size: .8rem; color: #aaa; }
+    .escape-pip { width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .4s; }
+    .escape-pip.done { background:#00ff88;box-shadow:0 0 8px #00ff88; }
+    .escape-pip.active { background:#ffcc00;box-shadow:0 0 8px #ffcc00; animation:pip-pulse 1s infinite; }
+    @keyframes pip-pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+    .escape-close { background:transparent;border:1px solid rgba(255,0,0,.4);color:#ff3b3b;padding:6px 14px;border-radius:6px;cursor:none;font-size:.8rem; }
+
+    .escape-stage { display: none; flex-direction: column; padding: 30px 24px; max-width: 780px; margin: 0 auto; width: 100%; }
+    .escape-stage.active { display: flex; }
+    .stage-label { font-size: .7rem; color: #ff3b3b; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 8px; }
+    .stage-title { font-size: 1.4rem; color: #fff; margin-bottom: 6px; font-weight: 700; }
+    .stage-desc  { font-size: .85rem; color: #aaa; margin-bottom: 20px; line-height: 1.6; }
+
+    .log-block {
+      background: #050505; border: 1px solid rgba(0,229,255,.2);
+      border-radius: 10px; padding: 14px; font-size: .75rem;
+      line-height: 1.7; color: #ccc; max-height: 220px; overflow-y: auto;
+      margin-bottom: 16px; white-space: pre-wrap;
+    }
+    .log-highlight { color: #ff3b3b; font-weight: 700; }
+
+    .cipher-block {
+      background: #050505; border: 1px solid rgba(255,59,255,.2);
+      border-radius: 10px; padding: 16px; font-size: .9rem;
+      letter-spacing: .2em; color: #ff3bff; text-align: center;
+      margin-bottom: 16px; font-weight: 700; word-break: break-all;
     }
 
-    .terminal-body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.2),
-          rgba(0, 0, 0, 0.2) 1px,
-          transparent 1px,
-          transparent 3px
-        );
-      mix-blend-mode: soft-light;
-      opacity: 0.4;
+    .escape-input {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px; padding: 10px 14px; color: #fff;
+      font-family: "Courier New", monospace; font-size: .9rem;
+      outline: none; width: 100%; max-width: 360px; cursor: none;
+      transition: border-color .2s;
+    }
+    .escape-input:focus { border-color: rgba(0,229,255,.6); }
+    .escape-input-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+    .escape-submit {
+      padding: 10px 22px; border-radius: 999px;
+      background: linear-gradient(135deg,#6a00ff,#00d4ff);
+      border: none; color: #fff; font-weight: 600; cursor: none;
+      transition: filter .15s; font-size: .9rem;
+    }
+    .escape-submit:hover { filter: brightness(1.1); }
+    .escape-hint { font-size: .75rem; color: #666; margin-top: 4px; }
+    .escape-error { color: #ff3b3b; font-size: .8rem; margin-top: 6px; display: none; }
+    .escape-error.show { display: block; }
+
+    /* Hidden element for stage 3 */
+    #hidden-key { display: none; color: #00ff88; font-size: .7rem; }
+
+    /* Certificate */
+    #escape-cert {
+      display: none; flex-direction: column; align-items: center;
+      padding: 40px 24px; text-align: center; max-width: 600px; margin: 0 auto;
+    }
+    #escape-cert.show { display: flex; }
+    .cert-glow {
+      font-size: 4rem; margin-bottom: 16px;
+      filter: drop-shadow(0 0 20px #00ff88);
+      animation: cert-pop .6s ease;
+    }
+    @keyframes cert-pop { 0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)} }
+    .cert-title { font-size: 1.8rem; color: #00ff88; font-weight: 700; margin-bottom: 8px; }
+    .cert-sub { font-size: .9rem; color: #9be7ff; margin-bottom: 20px; line-height: 1.6; }
+    .cert-badge {
+      border: 2px solid #00ff88; border-radius: 14px; padding: 16px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(0,255,136,.3), inset 0 0 20px rgba(0,255,136,.05);
+    }
+    .cert-score { font-size: 2.2rem; color: #ffcc00; font-weight: 700; }
+    .cert-label { font-size: .75rem; color: #aaa; letter-spacing: .1em; }
+    .cert-share {
+      padding: 11px 26px; border-radius: 999px;
+      background: linear-gradient(135deg,#00ff88,#00d4ff);
+      border: none; color: #000; font-weight: 700; cursor: none;
+      font-size: .9rem;
     }
 
-    .terminal-line {
-      position: relative;
-      z-index: 1;
-    }
-
-    .terminal-input-row {
-      display: flex;
-      align-items: center;
-      padding: 6px 8px 8px;
-      gap: 6px;
-      background: rgba(3, 9, 30, 0.96);
-      border-top: 1px solid rgba(255, 255, 255, 0.14);
-    }
-
-    .prompt {
-      font-size: 0.72rem;
-      color: #80deea;
-    }
-
-    #terminal-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #ffffff;
-      font-size: 0.8rem;
-    }
-
-    .terminal-hint {
-      color: #81c784;
-    }
-
-    .terminal-error {
-      color: #ff8a80;
-    }
-
-    /* ---------- CHATBOT ---------- */
-    #chatbot {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 260px;
-      background: rgba(8, 12, 40, 0.86);
-      backdrop-filter: blur(14px);
-      border-radius: 16px;
-      padding: 10px 12px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 0.85rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, width 0.2s ease, max-height 0.2s ease;
-      overflow: hidden;
-      z-index: 40;
-      max-height: 70px;
-    }
-
-    #chatbot:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.85);
-      max-height: 320px;
-      width: 320px;
-    }
-
-    .chatbot-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 4px;
-    }
-
-    .chatbot-tagline {
-      font-size: 0.7rem;
-      color: #b3e5fc;
-      opacity: 0.75;
-    }
-
-    #chatWindow {
-      height: 160px;
-      overflow-y: auto;
-      padding: 6px 2px;
-      font-size: 0.8rem;
-    }
-
-    #chatInput {
-      width: 100%;
-      margin-top: 4px;
-      padding: 7px 8px;
-      border-radius: 9px;
-      border: none;
-      font-size: 0.8rem;
-      outline: none;
-    }
-
-    /* ---------- MISC / RESPONSIVE ---------- */
-    .hidden {
-      display: none;
-    }
-
-    @media (max-width: 600px) {
-      nav {
-        flex-direction: column;
-        gap: 8px;
-        padding-inline: 18px;
-      }
-
-      .terminal {
-        left: 10px;
-        right: 10px;
-        width: auto;
-      }
-
-      #chatbot {
-        left: 10px;
-        right: 10px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .cyber-timeline {
-        padding: 40px 16px 32px;
-        min-height: auto;
-      }
-
-      .timeline-bar {
-        left: 50%;
-        right: auto;
-        width: 4px;
-        height: calc(100% - 80px);
-        top: 40px;
-        transform: translateX(-50%);
-        background: linear-gradient(180deg, #00e5ff, #4f46e5, #ff3bff);
-      }
-
-      .timeline-node {
-        display: block;
-        min-width: auto;
-        margin: 40px 0;
-        text-align: left;
-      }
-
-      .node-dot {
-        margin: 0 auto;
-      }
-
-      .node-card {
-        position: relative;
-        margin: 12px auto 0;
-        transform: scale(0.96);
-        max-width: 320px;
-      }
-
-      .timeline-node:nth-child(odd) .node-card,
-      .timeline-node:nth-child(even) .node-card {
-        top: auto;
-        bottom: auto;
-      }
-
-      .timeline-node:hover .node-card {
-        transform: scale(1.02);
-      }
-
-      .node-year {
-        text-align: center;
-      }
-
-      .coffee-badge-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .coffee-title {
-        white-space: normal;
-      }
-    }
   </style>
 </head>
 <body>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
   <canvas id="bg-canvas"></canvas>
 
   <nav>
     <div class="logo">BRISTIE_RAHMAN</div>
     <ul class="nav-links">
       <li><a href="#hero">Home</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="#boot-log">About</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#" id="escape-room-nav" style="color:#ff3bff;text-shadow:0 0 8px #ff3bff;">🔐 Escape Room</a></li>
     </ul>
   </nav>
 
   <main>
-    <!-- HERO -->
     <section class="hero" id="hero">
       <div class="hologram-overlay"></div>
       <h1 class="hero-title">Bristie Rahman</h1>
       <h3 class="hero-subtitle">Cybersecurity ✦ AI Research ✦ Digital Defense</h3>
-
       <div class="hero-buttons">
         <button class="cta-btn" id="scan-btn">Recruiter Quick Scan</button>
         <button class="cta-btn secondary" id="open-terminal-btn">Secret Terminal</button>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="section" id="about">
-      <div class="glass-card">
-        <h2>About Me</h2>
-        <p>
-          I am a University of Tulsa student majoring in Cybersecurity with specialization in Incident Response, Automation,
-          AI-driven detection, Red Teaming, and secure systems engineering. Feel free
-          to check out my projects, and special widgets such as recruiter terminal, AI
-          chatbot, and Recruiter Scanner. I'm passionate about bridging the gap between
-          cybersecurity operations and ML/AI integration. Looking forward to connecting!
-        </p>
-
-        <div class="about-buttons">
-          <a href="resumeSP26.pdf" target="_blank" class="btn resume-btn">View Resume</a>
-          <a href="https://www.linkedin.com/in/bristie-rahman-833125254/" target="_blank" class="btn linkedin-btn">LinkedIn</a>
+    <!-- SYSTEM BOOT LOG -->
+    <section class="section" id="boot-log">
+      <div class="glass-card boot-card">
+        <div class="boot-header">
+          <span class="boot-label">[ dmesg — system initialization ]</span>
+          <span class="boot-status-dot"></span>
+        </div>
+        <div id="boot-lines" class="boot-output"></div>
+        <div class="about-buttons" style="margin-top:20px;">
+          <a href="ResumeATS.pdf" target="_blank" class="btn">View Resume</a>
+          <a href="https://www.linkedin.com/in/bristie-rahman-833125254/" target="_blank" class="btn">LinkedIn</a>
         </div>
       </div>
     </section>
 
-    <!-- EXPERIENCE / CYBERPUNK TIMELINE -->
     <section id="experience" class="experience-cyber">
       <h2>Experience</h2>
-      <p class="experience-intro">
-        A quick jump through compliance, offensive security, threat hunting, research, and a little Starbucks-fueled chaos.
-        Hover over each node on the timeline to see more.
-      </p>
+      <p class="experience-intro">A quick jump through compliance, offensive security, threat hunting, research, and a little Starbucks-fueled chaos. Hover over each node on the timeline to see more.</p>
 
       <div class="cyber-timeline">
         <div class="timeline-bar"></div>
 
+        <!-- TEAM — Incoming -->
+        <div class="timeline-node">
+          <div class="timeline-node-anchor"></div>
+          <div class="node-card pentest">
+            <div class="node-header">
+              <span class="node-title">Penetration Tester Intern</span>
+              <span class="node-tag">TEAM · Incoming</span>
+              <span class="incoming-badge">⚡ Incoming</span>
+            </div>
+            <div class="node-body"><p>Offensive security internship focused on webapp exploitation.</p></div>
+          </div>
+        </div>
+
         <!-- OCII -->
         <div class="timeline-node">
-          <div class="node-dot"></div>
+          <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">🛰 Security Compliance Analyst</span>
+              <span class="node-title">Security Compliance Analyst</span>
               <span class="node-tag">OCII · Tulsa, OK</span>
             </div>
-            <div class="node-body">
-              <p>Assessed NIST-based controls across IT/OT and supported GreenUAS/BlueUAS drone security efforts.</p>
-              
-            </div>
+            <div class="node-body"><p>Assessed NIST-based controls across IT/OT and supported GreenUAS/BlueUAS drone security efforts.</p></div>
           </div>
-          <div class="node-year">OCII</div>
         </div>
 
         <!-- Mars -->
         <div class="timeline-node">
-          <div class="node-dot"></div>
+          <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">🛡️ Global Cybersecurity Intern</span>
+              <span class="node-title">Global Cybersecurity Intern</span>
               <span class="node-tag">Mars Wrigley · Chicago, IL</span>
             </div>
-            <div class="node-body">
-              <p>Supported phishing simulations, risk analysis, and GenAI / container security research.</p>
-              
-            </div>
+            <div class="node-body"><p>Supported phishing simulations, risk analysis, and GenAI / container security research.</p></div>
           </div>
-          <div class="node-year">Mars</div>
         </div>
 
         <!-- CBIZ -->
         <div class="timeline-node">
-          <div class="node-dot"></div>
+          <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">📊 Risk Advisory IT Audit Intern</span>
+              <span class="node-title">Risk Advisory IT Audit Intern</span>
               <span class="node-tag">CBIZ · Oklahoma City, OK</span>
             </div>
-            <div class="node-body">
-              <p>Evaluated client security posture using NIST, CSC, and ISO frameworks.</p>
-              
-            </div>
+            <div class="node-body"><p>Evaluated client security posture using NIST, CSC, and ISO frameworks.</p></div>
           </div>
-          <div class="node-year">CBIZ</div>
         </div>
 
-        <!-- SOC Analyst -->
+        <!-- SOC -->
         <div class="timeline-node">
-          <div class="node-dot"></div>
+          <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">🔍 SOC Analyst</span>
-              <span class="node-tag">The University of Tulsa · Tulsa, OK</span>
+              <span class="node-title">SOC Analyst</span>
+              <span class="node-tag">University of Tulsa · Tulsa, OK</span>
             </div>
-            <div class="node-body">
-              <p>Investigated alerts and hunted threats across campus infrastructure.</p>
-              
-            </div>
+            <div class="node-body"><p>Investigated alerts and hunted threats across campus infrastructure.</p></div>
           </div>
-          <div class="node-year">SOC</div>
         </div>
 
         <!-- Research -->
         <div class="timeline-node">
-          <div class="node-dot"></div>
+          <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">🧪 Undergraduate Researcher</span>
+              <span class="node-title">Undergraduate Researcher</span>
               <span class="node-tag">AI/ML Bias · CAPTCHA · Security ML</span>
             </div>
-            <div class="node-body">
-              <p>Study how AI systems break, bias, and can be attacked, with a focus on CAPTCHAs.</p>
-              
-            </div>
+            <div class="node-body"><p>Study how AI systems break, bias, and can be attacked, with a focus on CAPTCHAs.</p></div>
           </div>
-          <div class="node-year">Research</div>
         </div>
 
         <!-- Starbucks -->
         <div class="timeline-node">
-          <div class="node-dot"></div>
+          <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">☕ Shift Lead / Barista</span>
+              <span class="node-title">Shift Lead / Barista</span>
               <span class="node-tag">Starbucks · Tulsa, OK</span>
             </div>
-            <div class="node-body">
-              <p>Led store operations, trained partners, and kept everyone caffeinated and calm.</p>
-
-          
-            </div>
+            <div class="node-body"><p>Led store operations, trained partners, and kept everyone caffeinated and calm.</p></div>
           </div>
-          <div class="node-year">Starbucks</div>
         </div>
       </div>
 
-      <!-- ☕ Caffeine & Code Badge -->
       <div class="coffee-badge">
         <div class="coffee-badge-inner">
           <div class="coffee-icon">☕</div>
           <div class="coffee-text">
-            <div class="coffee-title">
-              Caffeine-Powered Cyber Human<span class="cursor">|</span>
-            </div>
-            <p>
-              Sustained by Starbucks lattes, secure code commits, and “just one more” pull request.
-            </p>
+            <div class="coffee-title">Caffeine-Powered Cyber Human<span class="blink-cursor">|</span></div>
+            <p>Sustained by Starbucks lattes, secure code commits, and "just one more" pull request.</p>
             <ul>
               <li>Caffeine level: <span class="coffee-chip">CRITICAL</span></li>
               <li>Favorite stack: <span class="coffee-chip">Peppermint Mocha × Keyboards × Firewalls</span></li>
@@ -971,81 +758,150 @@
       </div>
     </section>
 
-    <!-- PROJECTS -->
     <section class="section" id="projects">
-      <h2 class="section-title">Highlighted Projects</h2>
-
-      <div class="projects-grid">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
+        <h2 class="section-title" style="margin:0;">Highlighted Projects</h2>
+        <button id="compliance-toggle" class="cta-btn secondary" style="font-size:.8rem;padding:9px 18px;">
+          🛡 Enable Compliance View
+        </button>
+      </div>
+      <div class="projects-grid" id="projects-grid">
+        <div class="glass-card project-card" data-tags="NIST SP 800-53,Data Integrity,CVE Tracking"><strong>NVD CVE API Assurance</strong><p>Risk-based vulnerability enrichment using NVD's CVE API.</p><a class="btn" href="https://github.com/N00dleN00b/nvd-cve-api-assurance/tree/main" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="OWASP Top 10,Auth Controls,Zero Trust"><strong>JWT Token Authentication</strong><p>Secure JWT-based auth demo with token verification and role handling.</p><a class="btn" href="https://github.com/N00dleN00b/JWT_Authentication_Demo" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="Algorithm Integrity,Deterministic Output"><strong>Stable Matching Problem</strong><p>Implements Gale–Shapley with visual tracing of matching decisions.</p><a class="btn" href="https://github.com/N00dleN00b/Stable-Matching-Problem/tree/main" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="Memory Safety,CWE-119,Secure Coding"><strong>C Structures &amp; Algorithms</strong><p>Core data structures and algorithm implementations in C.</p><a class="btn" href="https://github.com/N00dleN00b/C-Structures-and-Algorithms/tree/main" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="OWASP Crawling,Scope Control,Recon"><strong>Website Traversal Tool</strong><p>Traversal utility for crawling and mapping websites safely.</p><a class="btn" href="https://github.com/N00dleN00b/Website-Traversal/tree/main" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="CWE-362 Mitigated,DoS Protection,RFC 7230"><strong>Multithreaded Web Server</strong><p>Custom HTTP server with FIFO / SFF / Random scheduling &amp; protections.</p><a class="btn" href="https://github.com/N00dleN00b/MultithreadedWebserver" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="CWE-122 Mitigated,Heap Safety,Memory Mgmt"><strong>Memory Allocator</strong><p>Manual memory management using free lists and block coalescing.</p><a class="btn" href="https://github.com/N00dleN00b/MemoryAllocatorProject/tree/main" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="Input Validation,Buffer Safety,C Standards"><strong>Text Editor Project</strong><p>Terminal-style text editor written in C.</p><a class="btn" href="https://github.com/N00dleN00b/TextEditorProject" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="NIST IR Lifecycle,Log Analysis,SIEM Ready"><strong>Incident Response Triage Script</strong><p>IR toolkit to automate triage, log parsing, and failed-login detection.</p><a class="btn" href="https://github.com/N00dleN00b/Incident-Response-Triage-Script/tree/main" target="_blank">View on GitHub</a></div>
+        
         <div class="glass-card project-card">
-          <strong>NVD CVE API Assurance</strong>
-          <p>Risk-based vulnerability enrichment using NVD’s CVE API.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/nvd-cve-api-assurance/tree/main" target="_blank">View on GitHub</a>
+          <strong>Lightweight Fine-Tuning with PEFT</strong>
+          <p>Instead of fine-tuning all model parameters, PEFT techniques like LoRA (Low-Rank Adaptation) allow you to train a tiny fraction of parameters while achieving strong performance.</p>
+          <a class="btn project-link" href="https://github.com/N00dleN00b/Lightweight_fine_tuning_AI" target="_blank">View on GitHub</a>
         </div>
 
-        <div class="glass-card project-card">
-          <strong>JWT Token Authentication</strong>
-          <p>Secure JWT-based auth demo with token verification and role handling.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/JWT_Authentication_Demo" target="_blank">View on GitHub</a>
-        </div>
 
         <div class="glass-card project-card">
-          <strong>Stable Matching Problem</strong>
-          <p>Implements Gale–Shapley with visual tracing of matching decisions.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/Stable-Matching-Problem/tree/main" target="_blank">View on GitHub</a>
+          <strong>Configure OPNsense Router</strong>
+          <p>Setp by step documentation to installing and callibrating personal OPNsense router.</p>
+          <a class="btn project-link" href="https://github.com/N00dleN00b/Opensense_Router" target="_blank">View on GitHub</a>
         </div>
 
-        <div class="glass-card project-card">
-          <strong>C Structures &amp; Algorithms</strong>
-          <p>Core data structures and algorithm implementations in C.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/C-Structures-and-Algorithms/tree/main" target="_blank">View on GitHub</a>
-        </div>
 
         <div class="glass-card project-card">
-          <strong>Website Traversal Tool</strong>
-          <p>Traversal utility for crawling and mapping websites safely.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/Website-Traversal/tree/main" target="_blank">View on GitHub</a>
+          <strong>Deployed Infrastructure Environment</strong>
+          <p>Three VMs connected to bluelan and one connected to redlan, deployed a workstation, fileserver, webserver and kali attack box.</p>
+          <a class="btn project-link" href="https://github.com/N00dleN00b/Network_Infrastructure_Build/tree/main/purple-networks-documentation-team-9-main" target="_blank">View on GitHub</a>
         </div>
 
-        <div class="glass-card project-card">
-          <strong>Multithreaded Web Server</strong>
-          <p>Custom HTTP server with FIFO / SFF / Random scheduling &amp; protections.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/MultithreadedWebserver" target="_blank">View on GitHub</a>
-        </div>
 
-        <div class="glass-card project-card">
-          <strong>Memory Allocator</strong>
-          <p>Manual memory management using free lists and block coalescing.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/MemoryAllocatorProject/tree/main" target="_blank">View on GitHub</a>
-        </div>
-
-        <div class="glass-card project-card">
-          <strong>Text Editor Project</strong>
-          <p>Terminal-style text editor written in C.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/TextEditorProject" target="_blank">View on GitHub</a>
-        </div>
-
-        <div class="glass-card project-card">
-          <strong>Incident Response Triage Script</strong>
-          <p>IR toolkit to automate triage, log parsing, and failed-login detection.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/Incident-Response-Triage-Script/tree/main" target="_blank">View on GitHub</a>
-        </div>
       </div>
     </section>
+
+   
   </main>
 
-  <!-- RECRUITER SCANNER MODAL -->
-  <div id="scanModal">
+  <!-- Background zone overlays -->
+  <div id="section-overlay"></div>
+  <div class="circuit-overlay" id="circuit-overlay"></div>
+  <div id="binary-rain"></div>
+  <div id="projects-glow"></div>
+
+  <!-- ESCAPE ROOM OVERLAY -->
+  <div id="escape-overlay">
+    <div class="escape-header">
+      <span class="escape-title">🔐 CYBER ESCAPE ROOM — LOCKDOWN MODE</span>
+      <div class="escape-progress">
+        <span>CHALLENGES:</span>
+        <div class="escape-pip active" id="pip-1"></div>
+        <div class="escape-pip" id="pip-2"></div>
+        <div class="escape-pip" id="pip-3"></div>
+      </div>
+      <button class="escape-close" id="escape-close-btn">ABORT MISSION</button>
+    </div>
+
+    <!-- Stage 1: Log Analysis -->
+    <div class="escape-stage active" id="stage-1">
+      <div class="stage-label">Challenge 01 / 03 — The Analyst</div>
+      <div class="stage-title">🔍 Firewall Log Analysis</div>
+      <div class="stage-desc">An OPNsense firewall log has been captured during an active incident. Identify the attacker's IP address by finding the source that triggered the most repeated BLOCK events in a short window — a classic brute-force signature.</div>
+      <div class="log-block">
+Jan 15 02:11:03 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12301,0,none,6,tcp,60,<span class="log-highlight">192.168.1.45</span>,10.0.0.1,54892,22,0
+Jan 15 02:11:04 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12302,0,none,6,tcp,60,203.0.113.77,10.0.0.1,44231,80,0
+Jan 15 02:11:05 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12303,0,none,6,tcp,60,<span class="log-highlight">192.168.1.45</span>,10.0.0.1,54893,22,0
+Jan 15 02:11:05 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12304,0,none,6,tcp,60,198.51.100.22,10.0.0.1,33901,443,0
+Jan 15 02:11:06 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12305,0,none,6,tcp,60,<span class="log-highlight">192.168.1.45</span>,10.0.0.1,54894,22,0
+Jan 15 02:11:06 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12306,0,none,6,tcp,60,<span class="log-highlight">192.168.1.45</span>,10.0.0.1,54895,22,0
+Jan 15 02:11:07 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12307,0,none,6,tcp,60,203.0.113.77,10.0.0.1,44232,80,0
+Jan 15 02:11:07 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12308,0,none,6,tcp,60,<span class="log-highlight">192.168.1.45</span>,10.0.0.1,54896,22,0
+Jan 15 02:11:08 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12309,0,none,6,tcp,60,<span class="log-highlight">192.168.1.45</span>,10.0.0.1,54897,22,0
+Jan 15 02:11:09 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12310,0,none,6,tcp,60,10.0.0.55,10.0.0.1,62100,3389,0</div>
+      <p style="font-size:.8rem;color:#7af8ff;margin-bottom:14px;">Enter the attacker's IP address:</p>
+      <div class="escape-input-row">
+        <input class="escape-input" id="s1-input" type="text" placeholder="x.x.x.x" autocomplete="off"/>
+        <button class="escape-submit" id="s1-submit">SUBMIT</button>
+      </div>
+      <div class="escape-hint">💡 Hint: Look for the source IP that appears most frequently targeting port 22 (SSH).</div>
+      <div class="escape-error" id="s1-error">❌ Incorrect. Analyze the source IPs — which one repeats on the same port?</div>
+    </div>
+
+    <!-- Stage 2: Cipher -->
+    <div class="escape-stage" id="stage-2">
+      <div class="stage-label">Challenge 02 / 03 — The Researcher</div>
+      <div class="stage-title">🧬 Decode the Research Abstract</div>
+      <div class="stage-desc">An AI research abstract has been encoded using a ROT13 cipher before transmission. Decode the keyword that describes the primary attack surface being studied.</div>
+      <div class="cipher-block">PNCGPUN OLERFF NGGNPXF</div>
+      <p style="font-size:.8rem;color:#7af8ff;margin-bottom:14px;">What are these three decoded words? (separated by spaces, all caps)</p>
+      <div class="escape-input-row">
+        <input class="escape-input" id="s2-input" type="text" placeholder="WORD WORD WORD" autocomplete="off" style="text-transform:uppercase;max-width:300px;"/>
+        <button class="escape-submit" id="s2-submit">SUBMIT</button>
+      </div>
+      <div class="escape-hint">💡 Hint: ROT13 shifts each letter by 13 positions. A→N, B→O, C→P... P→C</div>
+      <div class="escape-error" id="s2-error">❌ Not quite. Each letter shifts exactly 13 positions forward in the alphabet.</div>
+    </div>
+
+    <!-- Stage 3: Pentest / Inspect Element -->
+    <div class="escape-stage" id="stage-3">
+      <div class="stage-label">Challenge 03 / 03 — The Pentester</div>
+      <div class="stage-title">🕵️ Inspect &amp; Extract</div>
+      <div class="stage-desc">A hidden key has been embedded in this page's source code. Real pentesters always inspect what's not shown on screen. Open your browser's DevTools (F12), find the element with id="hidden-key", and enter the value you discover.</div>
+      <span id="hidden-key" data-secret="BRISTIE_L33T_H4X0R"><!-- 🔑 data-secret attribute holds the key --></span>
+      <p style="font-size:.8rem;color:#7af8ff;margin-bottom:14px;">Enter the key you found in the page source:</p>
+      <div class="escape-input-row">
+        <input class="escape-input" id="s3-input" type="text" placeholder="XXXXXX_XXXX_XXXXX" autocomplete="off"/>
+        <button class="escape-submit" id="s3-submit">SUBMIT</button>
+      </div>
+      <div class="escape-hint">💡 Hint: F12 → Inspector/Elements tab → search for "hidden-key" → look at data-secret attribute.</div>
+      <div class="escape-error" id="s3-error">❌ Wrong key. Did you check the data-secret attribute of #hidden-key?</div>
+    </div>
+
+    <!-- Certificate -->
+    <div id="escape-cert">
+      <div class="cert-glow">🏆</div>
+      <div class="cert-title">ACCESS GRANTED</div>
+      <div class="cert-sub">You have successfully breached the perimeter.<br>Certificate of Completion — Bristie Rahman's Security Gauntlet</div>
+      <div class="cert-badge">
+        <div class="cert-score" id="cert-score">1000 pts</div>
+        <div class="cert-label">HACKER SCORE</div>
+      </div>
+      <p style="font-size:.85rem;color:#9be7ff;margin-bottom:20px;line-height:1.7;">You demonstrated log analysis, cryptographic decoding, and source code inspection — the exact skills Bristie uses daily. This portfolio was built by someone who thinks like an attacker and defends like a pro.</p>
+      <button class="cert-share" id="cert-share-btn">📋 Copy Hacker Badge to Clipboard</button>
+    </div>
+  </div>
+
+  <div id="scanModal" style="display:none;">
     <div id="scanBox">
       <h2>🔍 Scanning Candidate...</h2>
       <p id="scanText">Initializing...</p>
     </div>
   </div>
 
-  <!-- SECRET TERMINAL -->
   <div id="terminal" class="terminal">
     <div class="terminal-header" id="terminal-header">
       <span class="terminal-title">~/recruiter_terminal</span>
-      <button id="close-terminal-btn" aria-label="Close terminal">&times;</button>
+      <button id="close-terminal-btn">&times;</button>
     </div>
     <div class="terminal-body" id="terminal-body"></div>
     <div class="terminal-input-row">
@@ -1054,300 +910,528 @@
     </div>
   </div>
 
-  <!-- CHATBOT -->
-  <div id="chatbot">
-    <div class="chatbot-header">
-      <strong>AI Assistant</strong>
-      <span class="chatbot-tagline">hover to expand</span>
+  <!-- Claude-powered AI chat -->
+  <button id="chatbot-fab" title="Ask AI about Bristie">🤖</button>
+  <div id="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar-lg">🤖</div>
+        <div>
+          <div class="chat-name">Bristie's AI Assistant</div>
+          <div class="chat-status">● Powered by Claude</div>
+        </div>
+      </div>
+      <button class="chat-close" id="chat-close">&times;</button>
     </div>
-    <div id="chatWindow"></div>
-    <input id="chatInput" placeholder="Ask about my projects..." />
+    <div id="chat-messages"></div>
+    <div class="chat-input-row">
+      <input id="chat-input" type="text" placeholder="Ask about skills, projects, experience..." autocomplete="off" />
+      <button id="chat-send">➤</button>
+    </div>
+    <div class="chat-disclaimer">Powered by Claude · Answers based on Bristie's portfolio</div>
   </div>
 
-  <!-- THREE.JS CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-  <!-- MAIN SCRIPT -->
   <script>
     window.addEventListener("load", () => {
+      initCursor();
       initBackground();
-      initRecruiterScan();
-      initChatbot();
+      initScan();
       initTerminal();
+      initChat();
+      initBootLog();
+      initScrollZones();
+      initCompliance();
+      initEscapeRoom();
     });
 
-    /* --------- STAR / HOLOGRAM BACKGROUND --------- */
-    function initBackground() {
-      const canvas = document.getElementById("bg-canvas");
-      if (!canvas || typeof THREE === "undefined") return;
+    /* ===== CURSOR TRAIL ===== */
+    function initCursor() {
+      const dot  = document.getElementById("cursor-dot");
+      const ring = document.getElementById("cursor-ring");
+      const COLORS = ["#00d4ff","#6a00ff","#ff3bff","#00e5ff","#7b2fff","#00ffb3","#ff00aa"];
 
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-      renderer.setPixelRatio(window.devicePixelRatio || 1);
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      let mx=-200,my=-200,rx=-200,ry=-200,lastSpawn=0;
 
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-      );
-      camera.position.z = 5;
-
-      const geometry = new THREE.BufferGeometry();
-      const positions = [];
-      const count = 3000;
-
-      for (let i = 0; i < count; i++) {
-        positions.push((Math.random() - 0.5) * 20);
-        positions.push((Math.random() - 0.5) * 20);
-        positions.push((Math.random() - 0.5) * 20);
-      }
-
-      geometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(positions, 3)
-      );
-
-      const material = new THREE.PointsMaterial({
-        color: 0x6a00ff,
-        size: 0.04,
-        transparent: true,
-        opacity: 0.9
+      document.addEventListener("mousemove", e => {
+        mx=e.clientX; my=e.clientY;
+        dot.style.left=mx+"px"; dot.style.top=my+"px";
+        spawnParticle(mx,my);
       });
 
-      const particles = new THREE.Points(geometry, material);
-      scene.add(particles);
+      // Expand ring on interactive elements — use delegation so it works everywhere
+      document.addEventListener("mouseover", e => {
+        if (e.target.closest("a,button")) ring.classList.add("cursor-ring-expand");
+      });
+      document.addEventListener("mouseout", e => {
+        if (e.target.closest("a,button")) ring.classList.remove("cursor-ring-expand");
+      });
 
-      let t = 0;
-      function animate() {
-        requestAnimationFrame(animate);
-        t += 0.002;
+      (function animateRing() {
+        rx += (mx-rx)*0.13; ry += (my-ry)*0.13;
+        ring.style.left=rx+"px"; ring.style.top=ry+"px";
+        requestAnimationFrame(animateRing);
+      })();
 
-        particles.rotation.y += 0.0009;
-        particles.rotation.x = Math.sin(t * 0.3) * 0.1;
-        camera.position.z = 5 + Math.sin(t * 0.6) * 0.2;
-
-        renderer.render(scene, camera);
+      function spawnParticle(x,y) {
+        const now=Date.now();
+        if(now-lastSpawn<30) return;
+        lastSpawn=now;
+        const size=3+Math.random()*8;
+        const col=COLORS[Math.floor(Math.random()*COLORS.length)];
+        const p=document.createElement("div");
+        p.className="trail-particle";
+        p.style.cssText=`left:${x}px;top:${y}px;width:${size}px;height:${size}px;background:${col};box-shadow:0 0 ${size*2}px ${col};animation-duration:${0.45+Math.random()*0.35}s;`;
+        document.body.appendChild(p);
+        p.addEventListener("animationend",()=>p.remove());
       }
-      animate();
+    }
 
-      window.addEventListener("resize", () => {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        renderer.setSize(w, h);
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
+    /* ===== STAR BACKGROUND ===== */
+    function initBackground() {
+      const canvas=document.getElementById("bg-canvas");
+      if(!canvas||typeof THREE==="undefined") return;
+      const renderer=new THREE.WebGLRenderer({canvas,alpha:true});
+      renderer.setPixelRatio(devicePixelRatio||1);
+      renderer.setSize(innerWidth,innerHeight);
+      const scene=new THREE.Scene();
+      const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,1000);
+      camera.position.z=5;
+      const geo=new THREE.BufferGeometry();
+      const pos=[];
+      for(let i=0;i<3000;i++){pos.push((Math.random()-.5)*20,(Math.random()-.5)*20,(Math.random()-.5)*20);}
+      geo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));
+      const mat=new THREE.PointsMaterial({color:0x6a00ff,size:.04,transparent:true,opacity:.9});
+      const pts=new THREE.Points(geo,mat);
+      scene.add(pts);
+      let t=0;
+      (function animate(){
+        requestAnimationFrame(animate);
+        t+=.002; pts.rotation.y+=.0009;
+        pts.rotation.x=Math.sin(t*.3)*.1;
+        camera.position.z=5+Math.sin(t*.6)*.2;
+        renderer.render(scene,camera);
+      })();
+      window.addEventListener("resize",()=>{
+        renderer.setSize(innerWidth,innerHeight);
+        camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
       });
     }
 
-    /* --------- RECRUITER QUICK SCAN --------- */
-    function initRecruiterScan() {
-      const scanBtn = document.getElementById("scan-btn");
-      const modal = document.getElementById("scanModal");
-      const text = document.getElementById("scanText");
+    /* ===== RECRUITER SCAN ===== */
+    function initScan() {
+      const btn=document.getElementById("scan-btn");
+      const modal=document.getElementById("scanModal");
+      const txt=document.getElementById("scanText");
+      if(!btn) return;
+      const msgs=["Analyzing technical depth...","Reviewing GitHub repositories...","Evaluating project complexity...","Scanning for cybersecurity expertise...","Candidate Score: ★★★★★","Result: Highly Recommended 🚀"];
+      btn.addEventListener("click",()=>{
+        modal.style.display="flex"; txt.textContent="Initializing..."; let i=0;
+        const iv=setInterval(()=>{txt.textContent=msgs[i++];if(i===msgs.length){clearInterval(iv);setTimeout(()=>modal.style.display="none",1600);}},900);
+      });
+      modal.addEventListener("click",e=>{if(e.target===modal)modal.style.display="none";});
+    }
 
-      if (!scanBtn || !modal || !text) return;
+    /* ===== TERMINAL ===== */
+    function initTerminal() {
+      const term=document.getElementById("terminal");
+      const hdr=document.getElementById("terminal-header");
+      const openBtn=document.getElementById("open-terminal-btn");
+      const closeBtn=document.getElementById("close-terminal-btn");
+      const body=document.getElementById("terminal-body");
+      const inp=document.getElementById("terminal-input");
+      if(!term) return;
+      let booted=false;
 
-      const messages = [
-        "Analyzing technical depth...",
-        "Reviewing GitHub repositories...",
-        "Evaluating project complexity...",
-        "Scanning for cybersecurity expertise...",
-        "Candidate Score: ★★★★★",
-        "Result: Highly Recommended 🚀"
+      function print(text,cls){
+        const d=document.createElement("div");
+        d.className="terminal-line"+(cls?" "+cls:"");
+        d.textContent=text; body.appendChild(d); body.scrollTop=body.scrollHeight;
+      }
+
+      function boot(){
+        body.innerHTML="";
+        const lines=["booting hologram shell v1.0...","mounting /dev/brain: OK","loading modules: incident_response, red_team, ai_detection...","checking imposter-syndrome level: within acceptable range.",'hint: type "ls" to reveal hidden artifacts.'];
+        let i=0;
+        (function next(){if(i<lines.length){print(lines[i],i===lines.length-1?"terminal-hint":"");i++;setTimeout(next,450);}else{booted=true;inp.focus();}})();
+      }
+
+      function run(raw){
+        const cmd=raw.trim();
+        if(!cmd) return;
+        print("bristie@portfolio:~$ "+cmd);
+        if(cmd==="ls"){
+          print("hidden_projects/  labs/  secrets/","terminal-hint"); print("");
+          print("hidden_projects/"); print("  ├─ uav_forensics_research/"); print("  ├─ cyber_escape_room_game/"); print("  └─ threat_hunting_simulator/");
+          print(""); print("labs/"); print("  ├─ hash_collision_lab/"); print("  └─ soc_oncall_war_stories.txt");
+          print(""); print("secrets/"); print("  ├─ offer_negotiation_notes.md"); print("  └─ README_you_should_hire_me.md  <- highly recommended 😉");
+        } else if(cmd==="help"){
+          print("available commands: ls, clear, help"); print('pro tip: start with "ls".','terminal-hint');
+        } else if(cmd==="clear"){ body.innerHTML="";
+        } else { print("command not found: "+cmd,"terminal-error"); print('type "help" if you need a hint.','terminal-hint'); }
+      }
+
+      openBtn.addEventListener("click",()=>{term.classList.add("visible");if(!booted)boot();else inp.focus();});
+      closeBtn.addEventListener("click",()=>term.classList.remove("visible"));
+      inp.addEventListener("keydown",e=>{if(e.key==="Enter"){const v=inp.value;inp.value="";run(v);}});
+
+      let drag=false,sx=0,sy=0,sl=0,st=0;
+      hdr.addEventListener("mousedown",e=>{drag=true;sx=e.clientX;sy=e.clientY;const r=term.getBoundingClientRect();sl=r.left;st=r.top;document.body.style.userSelect="none";});
+      window.addEventListener("mousemove",e=>{if(!drag)return;term.style.left=(sl+e.clientX-sx)+"px";term.style.top=(st+e.clientY-sy)+"px";term.style.bottom="auto";});
+      window.addEventListener("mouseup",()=>{drag=false;document.body.style.userSelect="";});
+    }
+
+    /* ===== CLAUDE-POWERED CHAT ===== */
+    function initChat() {
+      const fab      = document.getElementById("chatbot-fab");
+      const panel    = document.getElementById("chat-panel");
+      const closeBtn = document.getElementById("chat-close");
+      const msgs     = document.getElementById("chat-messages");
+      const input    = document.getElementById("chat-input");
+      const sendBtn  = document.getElementById("chat-send");
+      if(!fab) return;
+
+      let open=false, greeted=false;
+      let history=[];
+
+      const SYSTEM = `You are an AI assistant embedded on Bristie Rahman's personal cybersecurity portfolio website. Help recruiters, collaborators, and visitors learn about her work.
+
+ABOUT BRISTIE:
+- Student at University of Tulsa, majoring in Cybersecurity
+- Specializations: Incident Response, Automation, AI-driven detection, Red Teaming, secure systems engineering
+- Passionate about bridging cybersecurity operations with ML/AI
+
+EXPERIENCE (most recent first):
+1. Incoming Penetration Tester Intern @ TEAM — offensive security, pen testing, vulnerability discovery, red team ops
+2. Security Compliance Analyst @ OCII (Tulsa, OK) — NIST-based IT/OT controls, GreenUAS/BlueUAS drone security
+3. Global Cybersecurity Intern @ Mars Wrigley (Chicago, IL) — phishing simulations, risk analysis, GenAI & container security research
+4. Risk Advisory IT Audit Intern @ CBIZ (Oklahoma City, OK) — NIST, CSC, ISO framework evaluations
+5. SOC Analyst @ University of Tulsa — alert investigation, threat hunting across campus infrastructure
+6. Undergraduate Researcher — AI/ML bias, CAPTCHA security, attacking ML systems
+7. Shift Lead / Barista @ Starbucks — operations, team training, leadership
+
+PROJECTS:
+- NVD CVE API Assurance: risk-based vulnerability enrichment via NVD CVE API
+- JWT Token Authentication: JWT auth demo with token verification and role handling
+- Stable Matching Problem: Gale-Shapley with visual tracing
+- C Structures & Algorithms: data structures in C
+- Website Traversal Tool: safe web crawler
+- Multithreaded Web Server: FIFO/SFF/Random scheduling with security protections
+- Memory Allocator: malloc/free with free lists and block coalescing
+- Text Editor: terminal-style editor in C
+- Incident Response Triage Script: IR toolkit for log parsing and failed-login detection
+
+SKILLS: Python, C, NIST/ISO/CSC frameworks, SOC ops, red team/pen testing, AI/ML security research, incident response, compliance auditing
+
+Be concise, warm, and a little cyberpunk-flavored. Highlight Bristie's strengths when relevant. IMPORTANT: Do NOT use markdown formatting in your responses — no asterisks, no bold (**text**), no bullet dashes, no headers. Write in plain conversational sentences only.`;
+
+      // Lightweight markdown → safe HTML (handles bold, italic, bullets, newlines)
+      function parseMarkdown(text) {
+        return text
+          // Escape HTML entities first
+          .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+          // Bold **text** or __text__
+          .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+          .replace(/__(.+?)__/g,"<strong>$1</strong>")
+          // Italic *text* or _text_
+          .replace(/\*(.+?)\*/g,"<em>$1</em>")
+          .replace(/_([^_]+)_/g,"<em>$1</em>")
+          // Bullet lines starting with - or *
+          .replace(/(?:^|\n)[*\-] (.+)/g, (_, item) => `<li>${item}</li>`)
+          .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+          // Newlines → <br>
+          .replace(/\n/g,"<br>");
+      }
+
+      function toggle(){
+        open=!open;
+        panel.classList.toggle("open",open);
+        if(open&&!greeted){
+          greeted=true;
+          addMsg("ai","Hey! 👾 I'm Bristie's AI assistant — ask me about her projects, skills, or experience and I'll give you the full rundown!");
+        }
+        if(open) setTimeout(()=>input.focus(),280);
+      }
+
+      fab.addEventListener("click",toggle);
+      closeBtn.addEventListener("click",()=>{open=false;panel.classList.remove("open");});
+      sendBtn.addEventListener("click",send);
+      input.addEventListener("keydown",e=>{if(e.key==="Enter")send();});
+
+      function addMsg(role,text){
+        const w=document.createElement("div"); w.className="chat-msg "+role;
+        const av=document.createElement("div"); av.className="chat-av-sm"; av.textContent=role==="ai"?"🤖":"👤";
+        const b=document.createElement("div"); b.className="chat-bubble";
+        // For AI messages render parsed markdown; for user messages use safe escaped text
+        if(role==="ai"){ b.innerHTML=parseMarkdown(text); }
+        else { b.textContent=text; }
+        w.appendChild(av); w.appendChild(b); msgs.appendChild(w);
+        msgs.scrollTop=msgs.scrollHeight;
+      }
+
+      function showTyping(){
+        const w=document.createElement("div"); w.className="chat-msg ai"; w.id="typing-row";
+        const av=document.createElement("div"); av.className="chat-av-sm"; av.textContent="🤖";
+        const b=document.createElement("div"); b.className="chat-bubble";
+        b.innerHTML='<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+        w.appendChild(av); w.appendChild(b); msgs.appendChild(w); msgs.scrollTop=msgs.scrollHeight;
+      }
+      function removeTyping(){ const el=document.getElementById("typing-row"); if(el)el.remove(); }
+
+      async function send(){
+        const text=input.value.trim(); if(!text) return;
+        input.value=""; input.disabled=true; sendBtn.disabled=true;
+        addMsg("user",text);
+        history.push({role:"user",content:text});
+        showTyping();
+        try{
+          // Use Anthropic API directly — works both in Claude preview and on GitHub Pages via the worker
+          let res, data;
+          try {
+            // First try the Cloudflare worker (used on GitHub Pages)
+            res = await fetch("https://bristieportfolioproxy.numarahman50.workers.dev",{
+              method:"POST",
+              headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SYSTEM,messages:history})
+            });
+            if(!res.ok) throw new Error("worker-fail");
+            data = await res.json();
+          } catch(e) {
+            // Fallback: direct Anthropic API (works in Claude artifact preview)
+            res = await fetch("https://api.anthropic.com/v1/messages",{
+              method:"POST",
+              headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SYSTEM,messages:history})
+            });
+            data = await res.json();
+          }
+          removeTyping();
+          const reply=(data.content&&data.content[0]&&data.content[0].text)||"Hmm, something went wrong — try again!";
+          addMsg("ai",reply);
+          history.push({role:"assistant",content:reply});
+        } catch(err){
+          removeTyping();
+          console.error("Chat error:",err);
+          addMsg("ai","Connection hiccup — please try again in a moment.");
+        }
+        input.disabled=false; sendBtn.disabled=false; input.focus();
+      }
+    }
+
+    /* ===== SYSTEM BOOT LOG ===== */
+    function initBootLog() {
+      const container = document.getElementById("boot-lines");
+      if (!container) return;
+
+      const lines = [
+        { text: "Linux bristie-os 6.1.0-cyber #1 SMP PREEMPT", cls: "boot-dim" },
+        { text: "[    0.000000] Initializing kernel...", cls: "boot-dim" },
+        { text: "[  OK  ] Loaded: University of Tulsa — B.S. Cybersecurity", cls: "boot-ok" },
+        { text: "[  OK  ] Mount: Incident Response module — ACTIVE", cls: "boot-ok" },
+        { text: "[  OK  ] Mount: AI-Driven Detection module — ACTIVE", cls: "boot-ok" },
+        { text: "[  OK  ] Mount: Red Team / Pen Testing module — ACTIVE", cls: "boot-ok" },
+        { text: "[  OK  ] Mount: Compliance Frameworks (NIST · ISO · CSC) — ACTIVE", cls: "boot-ok" },
+        { text: "[  OK  ] Target: M.S. Cyber Studies — Est. 2028", cls: "boot-info" },
+        { text: "[ .... ] Bridging gap between ML/AI and Cybersecurity Ops...", cls: "boot-dim" },
+        { text: "[  OK  ] bristie@portfolio:~$ READY FOR HIRE", cls: "boot-ok" },
       ];
 
-      scanBtn.addEventListener("click", () => {
-        modal.style.display = "flex";
-        let i = 0;
-        text.textContent = "Initializing...";
-
-        const interval = setInterval(() => {
-          text.textContent = messages[i];
-          i++;
-          if (i === messages.length) {
-            clearInterval(interval);
-            setTimeout(() => {
-              modal.style.display = "none";
-            }, 1600);
-          }
-        }, 900);
-      });
-
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.style.display = "none";
-        }
-      });
-    }
-
-    /* --------- CHATBOT --------- */
-    function initChatbot() {
-      const chatWindow = document.getElementById("chatWindow");
-      const chatInput = document.getElementById("chatInput");
-      if (!chatWindow || !chatInput) return;
-
-      function botReply(q) {
-        const query = q.toLowerCase();
-        if (query.includes("web server"))
-          return "My multithreaded web server demonstrates FIFO, SFF, and Random scheduling with directory traversal protection.";
-        if (query.includes("allocator"))
-          return "My memory allocator implements malloc/free using custom free lists and block coalescing.";
-        if (query.includes("incident") || query.includes("ir"))
-          return "My IR scripting toolkit automates triage, log scanning, and failed login detection to speed up investigations.";
-        if (query.includes("ai") || query.includes("ml"))
-          return "I'm exploring AI for smarter detection, automation, and security tooling—not just buzzwords.";
-        return "I can tell you about my projects, skills, or experience—just ask!";
-      }
-
-      chatInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter" && chatInput.value.trim() !== "") {
-          const q = chatInput.value.trim();
-          chatWindow.innerHTML += '<div><strong>You:</strong> ' + q + "</div>";
-          chatInput.value = "";
-
+      let fired = false;
+      function runLines() {
+        if (fired) return;
+        fired = true;
+        lines.forEach((l, i) => {
           setTimeout(() => {
-            chatWindow.innerHTML += '<div><strong>AI:</strong> ' + botReply(q) + "</div>";
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-          }, 450);
+            const d = document.createElement("div");
+            d.className = "boot-line " + l.cls;
+            d.textContent = l.text;
+            container.appendChild(d);
+            container.scrollTop = container.scrollHeight;
+          }, i * 160);
+        });
+      }
+
+      const io = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { runLines(); io.disconnect(); }
+      }, { threshold: 0.1 });
+      io.observe(container);
+    }
+
+    /* ===== SCROLL ZONE BACKGROUNDS ===== */
+    function initScrollZones() {
+      const overlay   = document.getElementById("section-overlay");
+      const circuit   = document.getElementById("circuit-overlay");
+      const binRain   = document.getElementById("binary-rain");
+      const projGlow  = document.getElementById("projects-glow");
+
+      // Build binary rain columns
+      for (let i = 0; i < 16; i++) {
+        const col = document.createElement("div");
+        col.className = "binary-col";
+        col.style.animationDuration = (10 + Math.random() * 16) + "s";
+        col.style.animationDelay    = (-Math.random() * 16) + "s";
+        let str = "";
+        for (let j = 0; j < 60; j++) str += (Math.random() > .5 ? "1" : "0") + "\n";
+        col.textContent = str;
+        binRain.appendChild(col);
+      }
+
+      const expSection  = document.getElementById("experience");
+      const projSection = document.getElementById("projects");
+
+      let scrollTimer = null;
+      function onScroll() {
+        // Debounce slightly so transitions aren't jumpy
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(updateZone, 60);
+      }
+
+      function updateZone() {
+        if (!expSection || !projSection) return;
+        const expRect  = expSection.getBoundingClientRect();
+        const projRect = projSection.getBoundingClientRect();
+        const vh = window.innerHeight;
+
+        // How far into each section (0 = just entered, 1 = fully past)
+        const expVisible  = expRect.top  < vh * 0.7 && expRect.bottom  > vh * 0.3;
+        const projVisible = projRect.top < vh * 0.7 && projRect.bottom > vh * 0.3;
+
+        if (projVisible) {
+          overlay.style.background = "radial-gradient(ellipse at 50% 100%, rgba(40,0,80,.45) 0%, rgba(2,3,10,.97) 65%)";
+          circuit.classList.remove("visible");
+          binRain.classList.remove("visible");
+          projGlow.classList.add("visible");
+        } else if (expVisible) {
+          overlay.style.background = "linear-gradient(180deg, rgba(2,3,10,0) 0%, rgba(3,10,42,.92) 100%)";
+          circuit.classList.add("visible");
+          binRain.classList.add("visible");
+          projGlow.classList.remove("visible");
+        } else {
+          overlay.style.background = "transparent";
+          circuit.classList.remove("visible");
+          binRain.classList.remove("visible");
+          projGlow.classList.remove("visible");
         }
+      }
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      updateZone();
+    }
+
+    /* ===== COMPLIANCE VIEW ===== */
+    function initCompliance() {
+      const btn = document.getElementById("compliance-toggle");
+      if (!btn) return;
+
+      // Build tag elements for each card
+      document.querySelectorAll(".project-card[data-tags]").forEach(card => {
+        const tags = card.dataset.tags.split(",");
+        const tagDiv = document.createElement("div");
+        tagDiv.className = "compliance-tag";
+        tags.forEach(t => {
+          const s = document.createElement("span");
+          s.textContent = "✓ " + t.trim();
+          tagDiv.appendChild(s);
+        });
+        card.appendChild(tagDiv);
+      });
+
+      let on = false;
+      btn.addEventListener("click", () => {
+        on = !on;
+        document.body.classList.toggle("compliance-mode", on);
+        btn.textContent = on ? "🛡 Disable Compliance View" : "🛡 Enable Compliance View";
       });
     }
 
-    /* --------- TERMINAL WIDGET --------- */
-    function initTerminal() {
-      const terminal = document.getElementById("terminal");
-      const header = document.getElementById("terminal-header");
-      const openBtn = document.getElementById("open-terminal-btn");
-      const closeBtn = document.getElementById("close-terminal-btn");
-      const body = document.getElementById("terminal-body");
-      const input = document.getElementById("terminal-input");
+    /* ===== CYBER ESCAPE ROOM ===== */
+    function initEscapeRoom() {
+      const navBtn    = document.getElementById("escape-room-nav");
+      const overlay   = document.getElementById("escape-overlay");
+      const closeBtn  = document.getElementById("escape-close-btn");
+      if (!navBtn) return;
 
-      if (!terminal || !header || !openBtn || !closeBtn || !body || !input) return;
+      let startTime = 0;
 
-      let booted = false;
-
-      function clearTerminal() {
-        body.innerHTML = "";
+      function open() {
+        overlay.classList.add("open");
+        startTime = Date.now();
+        document.body.style.overflow = "hidden";
+      }
+      function close() {
+        overlay.classList.remove("open");
+        document.body.style.overflow = "";
       }
 
-      function printLine(text, className) {
-        const div = document.createElement("div");
-        div.className = "terminal-line" + (className ? " " + className : "");
-        div.textContent = text;
-        body.appendChild(div);
-        body.scrollTop = body.scrollHeight;
-      }
+      navBtn.addEventListener("click", e => { e.preventDefault(); open(); });
+      closeBtn.addEventListener("click", close);
 
-      function bootSequence() {
-        clearTerminal();
-        const lines = [
-          "booting hologram shell v1.0...",
-          "mounting /dev/brain: OK",
-          "loading modules: incident_response, red_team, ai_detection...",
-          "checking imposter-syndrome level: within acceptable range.",
-          'hint: type "ls" to reveal hidden artifacts.'
-        ];
-
-        let i = 0;
-        function next() {
-          if (i < lines.length) {
-            printLine(lines[i], i === lines.length - 1 ? "terminal-hint" : "");
-            i++;
-            setTimeout(next, 450);
-          } else {
-            booted = true;
-            input.focus();
-          }
-        }
-        next();
-      }
-
-      function handleCommand(cmdRaw) {
-        const cmd = cmdRaw.trim();
-        if (!cmd) return;
-
-        printLine("bristie@portfolio:~$ " + cmd);
-
-        if (cmd === "ls") {
-          printLine("hidden_projects/  labs/  secrets/", "terminal-hint");
-          printLine("");
-          printLine("hidden_projects/");
-          printLine("  ├─ uav_forensics_research/");
-          printLine("  ├─ cyber_escape_room_game/");
-          printLine("  └─ threat_hunting_simulator/");
-          printLine("");
-          printLine("labs/");
-          printLine("  ├─ hash_collision_lab/");
-          printLine("  └─ soc_oncall_war_stories.txt");
-          printLine("");
-          printLine("secrets/");
-          printLine("  ├─ offer_negotiation_notes.md");
-          printLine("  └─ README_you_should_hire_me.md  <- highly recommended to open 😉");
-        } else if (cmd === "help") {
-          printLine("available commands: ls, clear, help");
-          printLine('pro tip: start with "ls".', "terminal-hint");
-        } else if (cmd === "clear") {
-          clearTerminal();
+      function goStage(from, to) {
+        document.getElementById("stage-"+from).classList.remove("active");
+        if (to <= 3) {
+          document.getElementById("stage-"+to).classList.add("active");
+          document.getElementById("pip-"+from).classList.remove("active");
+          document.getElementById("pip-"+from).classList.add("done");
+          document.getElementById("pip-"+to).classList.add("active");
         } else {
-          printLine("command not found: " + cmd, "terminal-error");
-          printLine('type "help" if you need a hint.', "terminal-hint");
+          // Show cert
+          document.getElementById("pip-3").classList.remove("active");
+          document.getElementById("pip-3").classList.add("done");
+          showCert();
         }
       }
 
-      openBtn.addEventListener("click", () => {
-        terminal.classList.add("visible");
-        if (!booted) {
-          bootSequence();
+      // Stage 1
+      document.getElementById("s1-submit").addEventListener("click", () => {
+        const val = document.getElementById("s1-input").value.trim();
+        if (val === "192.168.1.45") {
+          goStage(1, 2);
         } else {
-          input.focus();
+          const err = document.getElementById("s1-error");
+          err.classList.add("show");
+          setTimeout(() => err.classList.remove("show"), 3000);
         }
       });
 
-      closeBtn.addEventListener("click", () => {
-        terminal.classList.remove("visible");
-      });
-
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          const value = input.value;
-          input.value = "";
-          handleCommand(value);
+      // Stage 2 — ROT13 of "CAPTCHA BYPASS ATTACKS"
+      document.getElementById("s2-submit").addEventListener("click", () => {
+        const val = document.getElementById("s2-input").value.trim().toUpperCase();
+        if (val === "CAPTCHA BYPASS ATTACKS") {
+          goStage(2, 3);
+        } else {
+          const err = document.getElementById("s2-error");
+          err.classList.add("show");
+          setTimeout(() => err.classList.remove("show"), 3000);
         }
       });
 
-      // Dragging
-      let isDragging = false;
-      let startX = 0;
-      let startY = 0;
-      let startLeft = 0;
-      let startTop = 0;
-
-      header.addEventListener("mousedown", (e) => {
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        const rect = terminal.getBoundingClientRect();
-        startLeft = rect.left;
-        startTop = rect.top;
-        document.body.style.userSelect = "none";
-      });
-
-      window.addEventListener("mousemove", (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        terminal.style.left = startLeft + dx + "px";
-        terminal.style.top = startTop + dy + "px";
-        terminal.style.bottom = "auto";
-      });
-
-      window.addEventListener("mouseup", () => {
-        if (isDragging) {
-          isDragging = false;
-          document.body.style.userSelect = "";
+      // Stage 3 — data-secret value
+      document.getElementById("s3-submit").addEventListener("click", () => {
+        const val = document.getElementById("s3-input").value.trim();
+        if (val === "BRISTIE_L33T_H4X0R") {
+          goStage(3, 4);
+        } else {
+          const err = document.getElementById("s3-error");
+          err.classList.add("show");
+          setTimeout(() => err.classList.remove("show"), 3000);
         }
+      });
+
+      function showCert() {
+        document.getElementById("stage-3").classList.remove("active");
+        const cert = document.getElementById("escape-cert");
+        cert.classList.add("show");
+        const elapsed = Math.round((Date.now() - startTime) / 1000);
+        const score = Math.max(500, 1000 - elapsed * 2);
+        document.getElementById("cert-score").textContent = score + " pts";
+      }
+
+      document.getElementById("cert-share-btn").addEventListener("click", () => {
+        const score = document.getElementById("cert-score").textContent;
+        const badge = `🏆 I just cracked Bristie Rahman's Cyber Escape Room!\nScore: ${score}\nChallenges: Log Analysis ✓ | ROT13 Cipher ✓ | DevTools Inspection ✓\nPortfolio: https://N00dleN00b.github.io`;
+        navigator.clipboard.writeText(badge).then(() => {
+          document.getElementById("cert-share-btn").textContent = "✅ Copied!";
+        });
       });
     }
   </script>
