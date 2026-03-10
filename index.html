@@ -85,12 +85,16 @@
     .cta-btn.secondary { background:rgba(4,10,40,.9); border:1px solid rgba(0,212,255,.5); }
     .cta-btn:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 10px 26px rgba(0,0,0,.6); filter:brightness(1.07); }
     /* SECTIONS */
+    main { display: block; }
     .section { padding:60px 20px; max-width:960px; margin:0 auto; }
+    .experience-cyber h2 { font-size:2.2rem; margin-bottom:10px; }
+    .experience-intro { max-width:720px; line-height:1.6; opacity:.85; margin:0 auto 40px; }
     .section-title { text-align:center; margin-bottom:24px; }
     .glass-card {
-      backdrop-filter:blur(18px); background:rgba(16,25,60,.75);
+      backdrop-filter:blur(18px); background:rgba(16,25,60,.97);
       border-radius:18px; padding:24px; margin:12px auto;
       border:1px solid rgba(255,255,255,.12); box-shadow:0 16px 35px rgba(0,0,0,.55);
+      isolation: isolate; position: relative; z-index: 1;
     }
     .about-buttons { margin-top:18px; display:flex; flex-wrap:wrap; gap:12px; }
     .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px; }
@@ -108,15 +112,11 @@
       background:#00aaff; color:#000; text-decoration:none; font-size:.85rem; font-weight:600; cursor:none;
     }
     .btn:hover { background:#00c2ff; }
-    /* TIMELINE */
-    .experience-cyber { max-width:1100px; margin:80px auto 0; padding:0 24px 0; text-align:center; }
-    .experience-cyber h2 { font-size:2.2rem; margin-bottom:10px; }
-    .experience-intro { max-width:720px; line-height:1.6; opacity:.85; margin:0 auto 40px; }
+    .experience-cyber { max-width:1100px; margin:80px auto 0; padding:0 24px; text-align:center; }
     .cyber-timeline {
       position:relative; margin-top:70px; padding:140px 20px 120px;
       display:grid; grid-template-columns:repeat(7,1fr);
-      align-items:center; overflow:visible;
-      min-width:0;
+      align-items:center; overflow:visible; min-width:0;
     }
     .timeline-bar {
       position:absolute; left:20px; right:20px; top:50%; height:4px;
@@ -128,44 +128,46 @@
       position:relative; display:flex; flex-direction:column;
       justify-content:center; align-items:center; min-width:0; margin:0;
     }
-    /* Anchor point dot (invisible but positions the card) */
     .timeline-node-anchor {
-      width:12px; height:12px; border-radius:50%; flex-shrink:0;
-      background:rgba(0,229,255,.3); position:relative; z-index:2;
+      width:10px; height:10px; border-radius:50%; flex-shrink:0;
+      background:rgba(0,229,255,.5); box-shadow:0 0 8px rgba(0,229,255,.8);
+      position:relative; z-index:2;
     }
-    .timeline-node:nth-child(odd)  .node-card { bottom:calc(100% + 18px); top:auto; }
-    .timeline-node:nth-child(even) .node-card { top:calc(100% + 18px); bottom:auto; }
+    .timeline-node:nth-child(odd)  .node-card { bottom:calc(100% + 14px); top:auto; }
+    .timeline-node:nth-child(even) .node-card { top:calc(100% + 14px); bottom:auto; }
     .node-dot,.node-year { display:none; }
     .node-card {
-      position:absolute; width:250px; padding:10px 12px; border-radius:14px;
+      position:absolute; width:250px; padding:12px 13px; border-radius:14px;
       background:linear-gradient(135deg,#050b24,#0b1038);
-      border:1px solid rgba(0,229,255,.65);
-      box-shadow:0 0 16px rgba(0,229,255,.4),0 0 28px rgba(0,0,0,.95);
-      transform:scale(.95); opacity:1;
-      transition:transform .22s ease-out,box-shadow .22s ease-out,background .22s ease-out,max-height .22s ease-out;
-      cursor:pointer; overflow:hidden; max-height:115px;
-      left:50%; transform:translateX(-50%) scale(.95);
+      border:1px solid rgba(0,229,255,.55);
+      box-shadow:0 0 12px rgba(0,229,255,.3),0 0 20px rgba(0,0,0,.95);
+      opacity:1;
+      transition:box-shadow .25s ease,background .25s ease,max-height .3s ease,border-color .25s ease;
+      cursor:pointer; overflow:hidden; max-height:110px;
+      left:50%; transform:translateX(-50%);
+      z-index:3; text-align:center;
     }
     .node-card.pentest {
-      border-color:rgba(255,59,255,.8);
-      box-shadow:0 0 16px rgba(255,59,255,.5),0 0 28px rgba(0,0,0,.95);
+      border-color:rgba(255,59,255,.7);
+      box-shadow:0 0 12px rgba(255,59,255,.4),0 0 20px rgba(0,0,0,.95);
     }
     .node-card::before,.node-card::after {
-      content:""; position:absolute; width:18px; height:18px;
-      border:1px solid rgba(0,229,255,.6);
+      content:""; position:absolute; width:14px; height:14px;
+      border:1px solid rgba(0,229,255,.5);
     }
-    .node-card.pentest::before,.node-card.pentest::after { border-color:rgba(255,59,255,.6); }
-    .node-card::before { top:6px; right:6px; border-left:none; border-bottom:none; }
-    .node-card::after  { bottom:6px; left:6px; border-right:none; border-top:none; }
+    .node-card.pentest::before,.node-card.pentest::after { border-color:rgba(255,59,255,.5); }
+    .node-card::before { top:5px; right:5px; border-left:none; border-bottom:none; }
+    .node-card::after  { bottom:5px; left:5px; border-right:none; border-top:none; }
     .node-header { display:flex; flex-direction:column; gap:2px; margin-bottom:6px; }
-    .node-title { font-size:.9rem; font-weight:700; }
-    .node-tag   { font-size:.75rem; opacity:.8; }
+    .node-title { font-size:.88rem; font-weight:700; }
+    .node-tag   { font-size:.74rem; opacity:.8; }
     .node-body  { font-size:.78rem; line-height:1.5; opacity:.9; }
     .timeline-node:hover .node-card {
-      transform:translateX(-50%) scale(1.06);
-      box-shadow:0 0 20px rgba(0,229,255,.9),0 0 32px rgba(255,59,255,.7);
-      background:radial-gradient(circle at top left,rgba(0,229,255,.16),rgba(12,20,60,.98));
+      box-shadow:0 0 22px rgba(0,229,255,.9),0 0 36px rgba(255,59,255,.5);
+      background:radial-gradient(circle at top left,rgba(0,229,255,.14),rgba(12,20,60,.98));
+      border-color:rgba(0,229,255,.9);
       max-height:240px;
+      z-index:10;
     }
     .incoming-badge {
       display:inline-block; font-size:.65rem; padding:2px 7px; border-radius:999px;
@@ -336,30 +338,52 @@
       #chatbot-fab{right:14px;}
     }
     @media(max-width:520px){
-      .cyber-timeline{
-        padding:24px 16px 24px;
-        display:flex; flex-direction:column; align-items:center; gap:0;
+      .cyber-timeline {
+        padding: 40px 16px 32px;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
-      .timeline-bar{
-        left:50%; right:auto; width:4px;
-        top:0; bottom:0; height:100%;
-        transform:translateX(-50%);
-        background:linear-gradient(180deg,#00e5ff,#4f46e5,#ff3bff);
+      .timeline-bar {
+        left: 50%;
+        right: auto;
+        width: 4px;
+        height: calc(100% - 80px);
+        top: 40px;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg, #00e5ff, #4f46e5, #ff3bff);
       }
-      .timeline-node{
-        width:100%; display:flex; flex-direction:row; align-items:flex-start;
-        min-width:auto; margin:0; padding:20px 0;
+      .timeline-node {
+        display: block;
+        min-width: auto;
+        width: 100%;
+        margin: 40px 0;
+        text-align: left;
       }
-      .timeline-node-anchor{ margin: 6px 16px 0 calc(50% - 6px); flex-shrink:0; }
-      .node-card{
-        position:relative; left:auto; top:auto; bottom:auto;
-        transform:none; width:calc(100% - 80px); max-width:320px;
-        margin-left:16px;
+      .node-dot {
+        margin: 0 auto;
       }
-      .timeline-node:nth-child(odd)  .node-card,
-      .timeline-node:nth-child(even) .node-card{ top:auto; bottom:auto; }
-      .timeline-node:hover .node-card{ transform:scale(1.02); }
-      .coffee-badge-inner{flex-direction:column;align-items:flex-start;}
+      .node-card {
+        position: relative;
+        left: auto; top: auto; bottom: auto;
+        margin: 12px auto 0;
+        transform: scale(0.96);
+        max-width: 320px;
+        width: calc(100% - 40px);
+      }
+      .timeline-node:nth-child(odd) .node-card,
+      .timeline-node:nth-child(even) .node-card {
+        top: auto;
+        bottom: auto;
+      }
+      .timeline-node:hover .node-card {
+        transform: scale(1.02);
+      }
+      .node-year {
+        text-align: center;
+      }
+      .coffee-badge-inner { flex-direction:column; align-items:flex-start; }
     }
     /* ---- SCROLL SECTION BACKGROUNDS ---- */
     .section-bg-transition {
@@ -370,7 +394,7 @@
 
     /* ---- BOOT LOG ---- */
     .circuit-overlay {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      position: fixed; inset: 0; z-index: -3; pointer-events: none;
       opacity: 0; transition: opacity 2s ease;
       background-image:
         linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px),
@@ -381,7 +405,7 @@
 
     /* Binary rain — very subtle, won't overpower content */
     #binary-rain {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      position: fixed; inset: 0; z-index: -3; pointer-events: none;
       opacity: 0; transition: opacity 2.5s ease;
       overflow: hidden;
       font-family: "Courier New", monospace;
@@ -402,7 +426,7 @@
 
     /* Projects zone: subtle deep purple radial */
     #projects-glow {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      position: fixed; inset: 0; z-index: -3; pointer-events: none;
       opacity: 0; transition: opacity 2s ease;
       background: radial-gradient(ellipse at 50% 80%, rgba(60,0,100,.22) 0%, transparent 65%);
     }
@@ -410,7 +434,7 @@
 
     /* Main background color shift — very slow and seamless */
     #section-overlay {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      position: fixed; inset: 0; z-index: -3; pointer-events: none;
       transition: background 2.5s cubic-bezier(0.4, 0, 0.2, 1);
       background: transparent;
     }
@@ -643,7 +667,7 @@
         </div>
         <div id="boot-lines" class="boot-output"></div>
         <div class="about-buttons" style="margin-top:20px;">
-          <a href="ResumeATS.pdf" target="_blank" class="btn">View Resume</a>
+          <a href="resumeSP26.pdf" target="_blank" class="btn">View Resume</a>
           <a href="https://www.linkedin.com/in/bristie-rahman-833125254/" target="_blank" class="btn">LinkedIn</a>
         </div>
       </div>
@@ -661,11 +685,11 @@
           <div class="timeline-node-anchor"></div>
           <div class="node-card pentest">
             <div class="node-header">
-              <span class="node-title">Penetration Tester Intern</span>
+              <span class="node-title">💀 Penetration Tester Intern</span>
               <span class="node-tag">TEAM · Incoming</span>
               <span class="incoming-badge">⚡ Incoming</span>
             </div>
-            <div class="node-body"><p>Offensive security internship focused on webapp exploitation.</p></div>
+            <div class="node-body"><p>Offensive security internship focused on penetration testing, vulnerability discovery, and red team operations.</p></div>
           </div>
         </div>
 
@@ -674,7 +698,7 @@
           <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">Security Compliance Analyst</span>
+              <span class="node-title">🛰 Security Compliance Analyst</span>
               <span class="node-tag">OCII · Tulsa, OK</span>
             </div>
             <div class="node-body"><p>Assessed NIST-based controls across IT/OT and supported GreenUAS/BlueUAS drone security efforts.</p></div>
@@ -686,7 +710,7 @@
           <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">Global Cybersecurity Intern</span>
+              <span class="node-title">🛡️ Global Cybersecurity Intern</span>
               <span class="node-tag">Mars Wrigley · Chicago, IL</span>
             </div>
             <div class="node-body"><p>Supported phishing simulations, risk analysis, and GenAI / container security research.</p></div>
@@ -698,7 +722,7 @@
           <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">Risk Advisory IT Audit Intern</span>
+              <span class="node-title">📊 Risk Advisory IT Audit Intern</span>
               <span class="node-tag">CBIZ · Oklahoma City, OK</span>
             </div>
             <div class="node-body"><p>Evaluated client security posture using NIST, CSC, and ISO frameworks.</p></div>
@@ -710,7 +734,7 @@
           <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">SOC Analyst</span>
+              <span class="node-title">🔍 SOC Analyst</span>
               <span class="node-tag">University of Tulsa · Tulsa, OK</span>
             </div>
             <div class="node-body"><p>Investigated alerts and hunted threats across campus infrastructure.</p></div>
@@ -722,7 +746,7 @@
           <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">Undergraduate Researcher</span>
+              <span class="node-title">🧪 Undergraduate Researcher</span>
               <span class="node-tag">AI/ML Bias · CAPTCHA · Security ML</span>
             </div>
             <div class="node-body"><p>Study how AI systems break, bias, and can be attacked, with a focus on CAPTCHAs.</p></div>
@@ -734,7 +758,7 @@
           <div class="timeline-node-anchor"></div>
           <div class="node-card">
             <div class="node-header">
-              <span class="node-title">Shift Lead / Barista</span>
+              <span class="node-title">☕ Shift Lead / Barista</span>
               <span class="node-tag">Starbucks · Tulsa, OK</span>
             </div>
             <div class="node-body"><p>Led store operations, trained partners, and kept everyone caffeinated and calm.</p></div>
@@ -775,32 +799,18 @@
         <div class="glass-card project-card" data-tags="CWE-122 Mitigated,Heap Safety,Memory Mgmt"><strong>Memory Allocator</strong><p>Manual memory management using free lists and block coalescing.</p><a class="btn" href="https://github.com/N00dleN00b/MemoryAllocatorProject/tree/main" target="_blank">View on GitHub</a></div>
         <div class="glass-card project-card" data-tags="Input Validation,Buffer Safety,C Standards"><strong>Text Editor Project</strong><p>Terminal-style text editor written in C.</p><a class="btn" href="https://github.com/N00dleN00b/TextEditorProject" target="_blank">View on GitHub</a></div>
         <div class="glass-card project-card" data-tags="NIST IR Lifecycle,Log Analysis,SIEM Ready"><strong>Incident Response Triage Script</strong><p>IR toolkit to automate triage, log parsing, and failed-login detection.</p><a class="btn" href="https://github.com/N00dleN00b/Incident-Response-Triage-Script/tree/main" target="_blank">View on GitHub</a></div>
+
         
-        <div class="glass-card project-card">
-          <strong>Lightweight Fine-Tuning with PEFT</strong>
-          <p>Instead of fine-tuning all model parameters, PEFT techniques like LoRA (Low-Rank Adaptation) allow you to train a tiny fraction of parameters while achieving strong performance.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/Lightweight_fine_tuning_AI" target="_blank">View on GitHub</a>
-        </div>
+      
+        <div class="glass-card project-card" data-tags="PEFT,LoRA,AI Security,Model Integrity"><strong>Lightweight Fine-Tuning with PEFT</strong><p>Applied LoRA (Low-Rank Adaptation) to fine-tune large language models by training a fraction of parameters, exploring how minimal access can yield powerful, potentially adversarial model behavior.</p><a class="btn" href="https://github.com/N00dleN00b/Lightweight_fine_tuning_AI" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="Network Security,Firewall Config,NIST SP 800-41"><strong>Configure OPNsense Router</strong><p>Step-by-step documentation for installing and calibrating a personal OPNsense firewall/router, covering interface setup, firewall rules, and secure network segmentation.</p><a class="btn" href="https://github.com/N00dleN00b/Opensense_Router" target="_blank">View on GitHub</a></div>
+        <div class="glass-card project-card" data-tags="Network Infra,VM Segmentation,Red vs Blue,NIST SP 800-53"><strong>Deployed Infrastructure Environment</strong><p>Built a multi-VM purple team lab with a workstation, file server, web server, and Kali attack box, segmented across BlueLAN and RedLAN to simulate real adversarial network environments.</p><a class="btn" href="https://github.com/N00dleN00b/Network_Infrastructure_Build/tree/main/purple-networks-documentation-team-9-main" target="_blank">View on GitHub</a></div>
 
-
-        <div class="glass-card project-card">
-          <strong>Configure OPNsense Router</strong>
-          <p>Setp by step documentation to installing and callibrating personal OPNsense router.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/Opensense_Router" target="_blank">View on GitHub</a>
-        </div>
-
-
-        <div class="glass-card project-card">
-          <strong>Deployed Infrastructure Environment</strong>
-          <p>Three VMs connected to bluelan and one connected to redlan, deployed a workstation, fileserver, webserver and kali attack box.</p>
-          <a class="btn project-link" href="https://github.com/N00dleN00b/Network_Infrastructure_Build/tree/main/purple-networks-documentation-team-9-main" target="_blank">View on GitHub</a>
-        </div>
-
-
+      
       </div>
     </section>
 
-   
+    <!-- CONTACT / SECURE CHANNEL removed per request -->
   </main>
 
   <!-- Background zone overlays -->
@@ -911,14 +921,36 @@ Jan 15 02:11:09 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12310,
   </div>
 
   <!-- Claude-powered AI chat -->
-  <button id="chatbot-fab" title="Ask AI about Bristie">🤖</button>
+  <button id="chatbot-fab" title="Ask about Bristie">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="8" width="16" height="13" rx="3" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+      <rect x="10" y="12" width="3" height="3" rx="1" fill="#00e5ff"/>
+      <rect x="15" y="12" width="3" height="3" rx="1" fill="#ff3bff"/>
+      <line x1="14" y1="5" x2="14" y2="8" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="14" cy="4" r="1.5" fill="#00e5ff"/>
+      <line x1="6" y1="16" x2="3" y2="16" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="22" y1="16" x2="25" y2="16" stroke="#ff3bff" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="9" y="21" width="10" height="2" rx="1" fill="rgba(0,229,255,0.3)" stroke="#00e5ff" stroke-width="1"/>
+    </svg>
+  </button>
   <div id="chat-panel">
     <div class="chat-header">
       <div class="chat-header-left">
-        <div class="chat-avatar-lg">🤖</div>
+        <div class="chat-avatar-lg">
+          <svg width="32" height="32" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="8" width="16" height="13" rx="3" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+            <rect x="10" y="12" width="3" height="3" rx="1" fill="#00e5ff"/>
+            <rect x="15" y="12" width="3" height="3" rx="1" fill="#ff3bff"/>
+            <line x1="14" y1="5" x2="14" y2="8" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="14" cy="4" r="1.5" fill="#00e5ff"/>
+            <line x1="6" y1="16" x2="3" y2="16" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="22" y1="16" x2="25" y2="16" stroke="#ff3bff" stroke-width="1.5" stroke-linecap="round"/>
+            <rect x="9" y="21" width="10" height="2" rx="1" fill="rgba(0,229,255,0.3)" stroke="#00e5ff" stroke-width="1"/>
+          </svg>
+        </div>
         <div>
           <div class="chat-name">Bristie's AI Assistant</div>
-          <div class="chat-status">● Powered by Claude</div>
+          <div class="chat-status">● Online</div>
         </div>
       </div>
       <button class="chat-close" id="chat-close">&times;</button>
@@ -928,7 +960,7 @@ Jan 15 02:11:09 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12310,
       <input id="chat-input" type="text" placeholder="Ask about skills, projects, experience..." autocomplete="off" />
       <button id="chat-send">➤</button>
     </div>
-    <div class="chat-disclaimer">Powered by Claude · Answers based on Bristie's portfolio</div>
+    <div class="chat-disclaimer">Bristie's Portfolio Assistant · Ask about skills, projects & experience</div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -1092,56 +1124,6 @@ Jan 15 02:11:09 opnsense filterlog: 4,,,1234,em0,match,block,in,4,0x0,,64,12310,
       if(!fab) return;
 
       let open=false, greeted=false;
-      let history=[];
-
-      const SYSTEM = `You are an AI assistant embedded on Bristie Rahman's personal cybersecurity portfolio website. Help recruiters, collaborators, and visitors learn about her work.
-
-ABOUT BRISTIE:
-- Student at University of Tulsa, majoring in Cybersecurity
-- Specializations: Incident Response, Automation, AI-driven detection, Red Teaming, secure systems engineering
-- Passionate about bridging cybersecurity operations with ML/AI
-
-EXPERIENCE (most recent first):
-1. Incoming Penetration Tester Intern @ TEAM — offensive security, pen testing, vulnerability discovery, red team ops
-2. Security Compliance Analyst @ OCII (Tulsa, OK) — NIST-based IT/OT controls, GreenUAS/BlueUAS drone security
-3. Global Cybersecurity Intern @ Mars Wrigley (Chicago, IL) — phishing simulations, risk analysis, GenAI & container security research
-4. Risk Advisory IT Audit Intern @ CBIZ (Oklahoma City, OK) — NIST, CSC, ISO framework evaluations
-5. SOC Analyst @ University of Tulsa — alert investigation, threat hunting across campus infrastructure
-6. Undergraduate Researcher — AI/ML bias, CAPTCHA security, attacking ML systems
-7. Shift Lead / Barista @ Starbucks — operations, team training, leadership
-
-PROJECTS:
-- NVD CVE API Assurance: risk-based vulnerability enrichment via NVD CVE API
-- JWT Token Authentication: JWT auth demo with token verification and role handling
-- Stable Matching Problem: Gale-Shapley with visual tracing
-- C Structures & Algorithms: data structures in C
-- Website Traversal Tool: safe web crawler
-- Multithreaded Web Server: FIFO/SFF/Random scheduling with security protections
-- Memory Allocator: malloc/free with free lists and block coalescing
-- Text Editor: terminal-style editor in C
-- Incident Response Triage Script: IR toolkit for log parsing and failed-login detection
-
-SKILLS: Python, C, NIST/ISO/CSC frameworks, SOC ops, red team/pen testing, AI/ML security research, incident response, compliance auditing
-
-Be concise, warm, and a little cyberpunk-flavored. Highlight Bristie's strengths when relevant. IMPORTANT: Do NOT use markdown formatting in your responses — no asterisks, no bold (**text**), no bullet dashes, no headers. Write in plain conversational sentences only.`;
-
-      // Lightweight markdown → safe HTML (handles bold, italic, bullets, newlines)
-      function parseMarkdown(text) {
-        return text
-          // Escape HTML entities first
-          .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-          // Bold **text** or __text__
-          .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
-          .replace(/__(.+?)__/g,"<strong>$1</strong>")
-          // Italic *text* or _text_
-          .replace(/\*(.+?)\*/g,"<em>$1</em>")
-          .replace(/_([^_]+)_/g,"<em>$1</em>")
-          // Bullet lines starting with - or *
-          .replace(/(?:^|\n)[*\-] (.+)/g, (_, item) => `<li>${item}</li>`)
-          .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
-          // Newlines → <br>
-          .replace(/\n/g,"<br>");
-      }
 
       function toggle(){
         open=!open;
@@ -1160,11 +1142,14 @@ Be concise, warm, and a little cyberpunk-flavored. Highlight Bristie's strengths
 
       function addMsg(role,text){
         const w=document.createElement("div"); w.className="chat-msg "+role;
-        const av=document.createElement("div"); av.className="chat-av-sm"; av.textContent=role==="ai"?"🤖":"👤";
+        const av=document.createElement("div"); av.className="chat-av-sm";
+        if(role==="ai"){
+          av.innerHTML=`<svg width="20" height="20" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="8" width="16" height="13" rx="3" stroke="#00e5ff" stroke-width="1.5" fill="none"/><rect x="10" y="12" width="3" height="3" rx="1" fill="#00e5ff"/><rect x="15" y="12" width="3" height="3" rx="1" fill="#ff3bff"/><line x1="14" y1="5" x2="14" y2="8" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/><circle cx="14" cy="4" r="1.5" fill="#00e5ff"/><line x1="6" y1="16" x2="3" y2="16" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="16" x2="25" y2="16" stroke="#ff3bff" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+        } else {
+          av.textContent="👤";
+        }
         const b=document.createElement("div"); b.className="chat-bubble";
-        // For AI messages render parsed markdown; for user messages use safe escaped text
-        if(role==="ai"){ b.innerHTML=parseMarkdown(text); }
-        else { b.textContent=text; }
+        b.textContent=text;
         w.appendChild(av); w.appendChild(b); msgs.appendChild(w);
         msgs.scrollTop=msgs.scrollHeight;
       }
@@ -1178,43 +1163,76 @@ Be concise, warm, and a little cyberpunk-flavored. Highlight Bristie's strengths
       }
       function removeTyping(){ const el=document.getElementById("typing-row"); if(el)el.remove(); }
 
-      async function send(){
-        const text=input.value.trim(); if(!text) return;
-        input.value=""; input.disabled=true; sendBtn.disabled=true;
-        addMsg("user",text);
-        history.push({role:"user",content:text});
-        showTyping();
-        try{
-          // Use Anthropic API directly — works both in Claude preview and on GitHub Pages via the worker
-          let res, data;
-          try {
-            // First try the Cloudflare worker (used on GitHub Pages)
-            res = await fetch("https://bristieportfolioproxy.numarahman50.workers.dev",{
-              method:"POST",
-              headers:{"Content-Type":"application/json"},
-              body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SYSTEM,messages:history})
-            });
-            if(!res.ok) throw new Error("worker-fail");
-            data = await res.json();
-          } catch(e) {
-            // Fallback: direct Anthropic API (works in Claude artifact preview)
-            res = await fetch("https://api.anthropic.com/v1/messages",{
-              method:"POST",
-              headers:{"Content-Type":"application/json"},
-              body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SYSTEM,messages:history})
-            });
-            data = await res.json();
-          }
-          removeTyping();
-          const reply=(data.content&&data.content[0]&&data.content[0].text)||"Hmm, something went wrong — try again!";
-          addMsg("ai",reply);
-          history.push({role:"assistant",content:reply});
-        } catch(err){
-          removeTyping();
-          console.error("Chat error:",err);
-          addMsg("ai","Connection hiccup — please try again in a moment.");
+      const RESPONSES = [
+        {
+          keys: ["experience","work","internship","job","career","background"],
+          reply: "Bristie has packed in some serious experience! She's an incoming Penetration Tester Intern at TEAM, previously a Security Compliance Analyst at OCII, a Global Cybersecurity Intern at Mars Wrigley in Chicago, a Risk Advisory IT Audit Intern at CBIZ, and a SOC Analyst at the University of Tulsa. She also does undergraduate research in AI/ML security. That's five security roles before graduation — recruiters love that."
+        },
+        {
+          keys: ["pentest","penetration","red team","offensive","hacking","hack"],
+          reply: "Bristie is stepping into offensive security as an incoming Penetration Tester Intern at TEAM, focused on pen testing, vulnerability discovery, and red team operations. She also built hands-on skills through her SOC Analyst role and personal projects like the Website Traversal Tool and Incident Response Triage Script."
+        },
+        {
+          keys: ["compliance","nist","iso","csc","audit","framework","governance"],
+          reply: "Compliance is one of Bristie's strong suits. At OCII she assessed NIST-based IT/OT controls and supported drone security programs. At CBIZ she evaluated client security posture using NIST, CSC, and ISO frameworks. She can speak both the technical and compliance language — rare combo."
+        },
+        {
+          keys: ["soc","analyst","threat","hunting","alert","incident","response","triage","ir"],
+          reply: "As a SOC Analyst at the University of Tulsa, Bristie investigated alerts and hunted threats across campus infrastructure. She also built an Incident Response Triage Script that automates log parsing and failed-login detection — real operational tooling, not just theory."
+        },
+        {
+          keys: ["ai","ml","machine learning","research","captcha","bias"],
+          reply: "Bristie is passionate about the intersection of AI and security. Her undergraduate research focuses on AI/ML bias and CAPTCHA security — specifically studying how ML systems can be attacked and manipulated. She's one of the few people who thinks about cybersecurity from an AI-adversarial perspective."
+        },
+        {
+          keys: ["project","github","code","build","portfolio","jwt","cve","server","allocator","editor","traversal"],
+          reply: "Bristie's GitHub is stacked! Highlights include: an NVD CVE API Assurance tool for vulnerability enrichment, a JWT Token Authentication demo, a Multithreaded Web Server with security scheduling protections, a Memory Allocator in C, a Website Traversal Tool, and an Incident Response Triage Script. All open source at github.com/N00dleN00b."
+        },
+        {
+          keys: ["skill","language","python","c ","programming","tool","stack","tech"],
+          reply: "Bristie's technical stack includes Python, C, SOC operations, NIST/ISO/CSC compliance frameworks, red team and pen testing, AI/ML security research, incident response, and compliance auditing. She bridges the gap between low-level systems work and high-level security strategy."
+        },
+        {
+          keys: ["education","degree","university","tulsa","school","study","major","graduate"],
+          reply: "Bristie is pursuing her B.S. in Cybersecurity at the University of Tulsa, with her sights set on a Master's degree in Cyber Studies (Est. 2026). TU is a top-ranked NSA-designated cybersecurity school — she's in the right place."
+        },
+        {
+          keys: ["hire","hiring","recruit","opportunity","available","open","job","position","role","team"],
+          reply: "Bristie is actively open to opportunities! She brings a rare combo of compliance, offensive security, SOC operations, and AI/ML research experience — all before graduation. Reach out directly at numa.rahman50@gmail.com and she'll get back to you fast."
+        },
+        {
+          keys: ["contact","email","reach","connect","linkedin","message"],
+          reply: "You can reach Bristie directly at numa.rahman50@gmail.com or connect on LinkedIn at linkedin.com/in/bristie-rahman-833125254. She's responsive and always open to interesting conversations!"
+        },
+        {
+          keys: ["starbucks","barista","coffee","leadership","team","manage"],
+          reply: "Even Bristie's non-cyber job shows leadership — she was a Shift Lead at Starbucks, managing operations, training partners, and keeping everyone caffeinated and calm. The portfolio even has a caffeine level section. It's critical, FYI."
+        },
+        {
+          keys: ["mars","wrigley","chicago","phishing","container","genai"],
+          reply: "At Mars Wrigley in Chicago, Bristie supported phishing simulations, risk analysis, and researched GenAI and container security. Getting real enterprise security exposure at a global Fortune 500 company as an intern is a big deal."
+        },
+      ];
+
+      const FALLBACK = "Great question! For specifics, reach out to Bristie directly at numa.rahman50@gmail.com — she'd love to chat. You can also try asking about her experience, projects, skills, research, or contact info!";
+
+      function getReply(text) {
+        const lower = text.toLowerCase();
+        for (const r of RESPONSES) {
+          if (r.keys.some(k => lower.includes(k))) return r.reply;
         }
-        input.disabled=false; sendBtn.disabled=false; input.focus();
+        return FALLBACK;
+      }
+
+      function send(){
+        const text=input.value.trim(); if(!text) return;
+        input.value="";
+        addMsg("user",text);
+        showTyping();
+        setTimeout(()=>{
+          removeTyping();
+          addMsg("ai", getReply(text));
+        }, 600 + Math.random()*400);
       }
     }
 
@@ -1231,7 +1249,12 @@ Be concise, warm, and a little cyberpunk-flavored. Highlight Bristie's strengths
         { text: "[  OK  ] Mount: AI-Driven Detection module — ACTIVE", cls: "boot-ok" },
         { text: "[  OK  ] Mount: Red Team / Pen Testing module — ACTIVE", cls: "boot-ok" },
         { text: "[  OK  ] Mount: Compliance Frameworks (NIST · ISO · CSC) — ACTIVE", cls: "boot-ok" },
-        { text: "[  OK  ] Target: M.S. Cyber Studies — Est. 2028", cls: "boot-info" },
+        { text: "[  OK  ] Service: SOC Analyst @ University of Tulsa — RUNNING", cls: "boot-ok" },
+        { text: "[  OK  ] Service: Intern @ Mars Wrigley Chicago — COMPLETED", cls: "boot-ok" },
+        { text: "[  OK  ] Service: Compliance Analyst @ OCII — COMPLETED", cls: "boot-ok" },
+        { text: "[  OK  ] Service: Penetration Tester @ TEAM — INCOMING", cls: "boot-warn" },
+        { text: "[  OK  ] Research: AI/ML Bias · CAPTCHA Security — ONGOING", cls: "boot-info" },
+        { text: "[  OK  ] Target: M.S. Cyber Studies — Est. 2026", cls: "boot-info" },
         { text: "[ .... ] Bridging gap between ML/AI and Cybersecurity Ops...", cls: "boot-dim" },
         { text: "[  OK  ] bristie@portfolio:~$ READY FOR HIRE", cls: "boot-ok" },
       ];
